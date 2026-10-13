@@ -1,0 +1,58 @@
+.intro { max-width: 760px; padding-block: var(--s-8) var(--s-6); margin-inline: auto; text-align: left; }
+.intro { width: min(100% - 2 * var(--gutter), 760px); }
+.intro h1 { margin: var(--s-3) 0 var(--s-4); font-size: var(--fs-display); }
+.intro p:not(.eyebrow) { font-size: var(--fs-lg); color: var(--text-muted); }
+
+.heading { margin-bottom: var(--s-5); font-size: var(--fs-2xl); }
+
+/* One raised panel with three columns split by inset dividers */
+.audience {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  border-radius: var(--r-lg);
+  background: var(--surface);
+  box-shadow: var(--shadow-raised);
+}
+
+.audienceItem { padding: var(--s-6); }
+.audienceItem + .audienceItem { border-left: 1px solid var(--divider); }
+.audienceItem h3 { margin-bottom: var(--s-2); font-size: var(--fs-lg); }
+.audienceItem p { font-size: var(--fs-sm); color: var(--text-muted); }
+
+.principles { display: grid; grid-template-columns: 1fr 1.3fr; gap: var(--s-7); align-items: start; }
+.sticky { position: sticky; top: var(--nav-h); }
+
+.principle { display: flex; gap: var(--s-5); padding-block: var(--s-5); border-bottom: 1px solid var(--divider); }
+.principle:first-child { padding-top: 0; }
+
+.no {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 46px;
+  height: 46px;
+  border-radius: var(--r-sm);
+  box-shadow: var(--shadow-inset-sm);
+  font: 700 var(--fs-sm) / 1 var(--font-display);
+  color: var(--accent-strong);
+}
+
+.principle h3 { margin-bottom: var(--s-2); font-size: var(--fs-lg); }
+.principle p { font-size: var(--fs-sm); color: var(--text-muted); }
+
+.end {
+  display: grid;
+  justify-items: center;
+  gap: var(--s-5);
+  padding-block: var(--s-7) var(--s-9);
+  text-align: center;
+}
+
+.end h2 { max-width: 24ch; font-size: var(--fs-2xl); }
+
+@media (max-width: 860px) {
+  .audience { grid-template-columns: 1fr; }
+  .audienceItem + .audienceItem { border-left: 0; border-top: 1px solid var(--divider); }
+  .principles { grid-template-columns: 1fr; gap: var(--s-5); }
+  .sticky { position: static; }
+}

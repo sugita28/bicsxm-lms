@@ -1,0 +1,56 @@
+[
+  {
+    "id": 1, "title": "Web Development Basics", "category": "Programming", "level": "Beginner",
+    "duration": "6 weeks", "lessons": 24, "instructor": "Aarav Sharma",
+    "summary": "Build and publish a small responsive website with HTML, CSS and a little JavaScript.",
+    "outcomes": ["Structure pages with semantic HTML", "Style layouts with Flexbox and Grid", "Add interactivity with JavaScript and publish your site"]
+  },
+  {
+    "id": 2, "title": "Python for Beginners", "category": "Programming", "level": "Beginner",
+    "duration": "5 weeks", "lessons": 20, "instructor": "Sita Rai",
+    "summary": "Learn to think in code: variables, loops, functions and small programs you can actually run.",
+    "outcomes": ["Write and debug basic Python programs", "Work with lists, dictionaries and files", "Finish a small command-line project"]
+  },
+  {
+    "id": 3, "title": "React Essentials", "category": "Programming", "level": "Intermediate",
+    "duration": "8 weeks", "lessons": 32, "instructor": "Bikash Thapa",
+    "summary": "Components, state and routing, taught by building a real multi-page app.",
+    "outcomes": ["Build reusable components", "Manage state and side effects with hooks", "Add routing and fetch data from an API"]
+  },
+  {
+    "id": 4, "title": "UI/UX Design Fundamentals", "category": "Design", "level": "Beginner",
+    "duration": "4 weeks", "lessons": 16, "instructor": "Mina Gurung",
+    "summary": "Go from a user problem to a clickable prototype without needing to draw well.",
+    "outcomes": ["Run quick user research", "Sketch wireframes and user flows", "Prototype and test a simple app screen"]
+  },
+  {
+    "id": 5, "title": "Graphic Design with Canva", "category": "Design", "level": "Beginner",
+    "duration": "3 weeks", "lessons": 12, "instructor": "Rojan Karki",
+    "summary": "Posters, social posts and slide decks that look consistent and tidy.",
+    "outcomes": ["Choose colours and fonts that work together", "Lay out text and images clearly", "Create a small brand kit for a school club"]
+  },
+  {
+    "id": 6, "title": "Data Analysis with Excel", "category": "Data", "level": "Intermediate",
+    "duration": "5 weeks", "lessons": 18, "instructor": "Anita Shrestha",
+    "summary": "Clean messy sheets, use formulas and pivot tables, and present what you find.",
+    "outcomes": ["Clean and structure raw data", "Use lookups, formulas and pivot tables", "Turn results into clear charts"]
+  },
+  {
+    "id": 7, "title": "Cyber Security Awareness", "category": "Security", "level": "Beginner",
+    "duration": "2 weeks", "lessons": 8, "instructor": "Prakash Adhikari",
+    "summary": "Practical habits for staying safe online, from passwords to spotting phishing.",
+    "outcomes": ["Create and manage strong passwords", "Recognise phishing and scam messages", "Secure your accounts and devices"]
+  },
+  {
+    "id": 8, "title": "English Communication Skills", "category": "Languages", "level": "Beginner",
+    "duration": "6 weeks", "lessons": 22, "instructor": "Sarita Lama",
+    "summary": "Speak and write with more confidence in class, in interviews and at work.",
+    "outcomes": ["Structure short talks and presentations", "Write clear emails and short reports", "Practise listening and everyday conversation"]
+  },
+  {
+    "id": 9, "title": "Database Management with SQL", "category": "Data", "level": "Advanced",
+    "duration": "7 weeks", "lessons": 28, "instructor": "Nabin Pandey",
+    "summary": "Design tables properly and write queries that stay fast as the data grows.",
+    "outcomes": ["Model data with keys and relationships", "Write joins, subqueries and aggregations", "Use indexes and transactions"]
+  }
+]
