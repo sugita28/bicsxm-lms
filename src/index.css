@@ -1,0 +1,245 @@
+@import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&family=Figtree:wght@400;500;600&display=swap');
+
+/* =====================================================================
+   DESIGN TOKENS: change the look of the whole site from here
+   ===================================================================== */
+:root {
+  /* ---------- Surfaces ---------- */
+  --bg: #e5eaf3;
+  --surface: #e5eaf3;          /* neumorphic surfaces must match --bg */
+  --surface-strong: #d9dfec;
+  --divider: rgba(86, 96, 140, 0.18);
+
+  /* ---------- Text ---------- */
+  --text: #151c33;
+  --text-muted: #566079;
+  --text-on-accent: #ffffff;
+
+  /* ---------- Brand + status ---------- */
+  --accent: #2f55ff;
+  --accent-strong: #1f3fd6;
+  --accent-soft: #d5ddff;
+  --success: #1f8a5b;
+  --success-soft: #d3efe2;
+  --danger: #b3342a;
+
+  /* ---------- Clay tones (course tiles, blobs) ---------- */
+  --tone-0: #bcd0ff;
+  --tone-1: #ffd3b8;
+  --tone-2: #c7ecd9;
+  --tone-3: #e6cdf5;
+  --tone-4: #fbe6a8;
+
+  /* ---------- Neumorphism ---------- */
+  --neu-light: #ffffff;
+  --neu-dark: #bcc6da;
+  --shadow-raised: 9px 9px 18px var(--neu-dark), -9px -9px 18px var(--neu-light);
+  --shadow-raised-hover: 12px 12px 24px var(--neu-dark), -12px -12px 24px var(--neu-light);
+  --shadow-raised-sm: 5px 5px 10px var(--neu-dark), -5px -5px 10px var(--neu-light);
+  --shadow-inset: inset 6px 6px 12px var(--neu-dark), inset -6px -6px 12px var(--neu-light);
+  --shadow-inset-sm: inset 3px 3px 6px var(--neu-dark), inset -3px -3px 6px var(--neu-light);
+  --shadow-pressed: inset 4px 4px 8px var(--neu-dark), inset -4px -4px 8px var(--neu-light);
+
+  /* ---------- Claymorphism ---------- */
+  --shadow-clay: 8px 10px 20px rgba(86, 96, 140, 0.28),
+    inset -6px -8px 14px rgba(40, 50, 100, 0.16),
+    inset 6px 8px 14px rgba(255, 255, 255, 0.7);
+  --shadow-clay-accent: 8px 12px 24px rgba(47, 85, 255, 0.35),
+    inset -7px -9px 16px rgba(10, 25, 120, 0.4),
+    inset 7px 9px 16px rgba(255, 255, 255, 0.4);
+  --shadow-clay-accent-pressed: 3px 4px 8px rgba(47, 85, 255, 0.3),
+    inset -4px -5px 10px rgba(255, 255, 255, 0.25),
+    inset 5px 6px 12px rgba(10, 25, 120, 0.45);
+  --shadow-clay-dot: 2px 3px 6px rgba(47, 85, 255, 0.35),
+    inset -2px -3px 5px rgba(10, 25, 120, 0.35),
+    inset 2px 3px 5px rgba(255, 255, 255, 0.45);
+
+  /* ---------- Liquid glass ---------- */
+  --glass-bg: rgba(255, 255, 255, 0.45);
+  --glass-border: rgba(255, 255, 255, 0.75);
+  --glass-blur: blur(20px) saturate(170%);
+  --glass-shadow: 0 12px 32px rgba(70, 85, 130, 0.18),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.25);
+  --glass-sheen: linear-gradient(135deg, rgba(255, 255, 255, 0.65) 0%, rgba(255, 255, 255, 0) 45%);
+
+  /* ---------- Radii ---------- */
+  --r-xs: 8px;
+  --r-sm: 12px;
+  --r-md: 20px;
+  --r-lg: 28px;
+  --r-xl: 40px;
+  --r-pill: 999px;
+
+  /* ---------- Spacing ---------- */
+  --s-1: 0.25rem;
+  --s-2: 0.5rem;
+  --s-3: 0.75rem;
+  --s-4: 1rem;
+  --s-5: 1.5rem;
+  --s-6: 2rem;
+  --s-7: 3rem;
+  --s-8: 4.5rem;
+  --s-9: 6rem;
+
+  /* ---------- Typography ---------- */
+  --font-display: 'Bricolage Grotesque', 'Segoe UI', system-ui, sans-serif;
+  --font-body: 'Figtree', 'Segoe UI', system-ui, sans-serif;
+  --fs-xs: 0.78rem;
+  --fs-sm: 0.92rem;
+  --fs-md: 1rem;
+  --fs-lg: 1.2rem;
+  --fs-xl: 1.6rem;
+  --fs-2xl: clamp(1.9rem, 3.5vw, 2.6rem);
+  --fs-display: clamp(2.4rem, 5.5vw, 4rem);
+  --lh-tight: 1.1;
+  --lh-body: 1.65;
+
+  /* ---------- Layout ---------- */
+  --max-width: 1120px;
+  --gutter: clamp(1rem, 4vw, 2rem);
+  --nav-h: 96px;
+  --z-nav: 50;
+
+  /* ---------- Motion ---------- */
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --dur-fast: 0.2s;
+  --dur: 0.4s;
+  --dur-slow: 0.8s;
+}
+
+/* =====================================================================
+   BASE
+   ===================================================================== */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--font-body);
+  font-size: var(--fs-md);
+  line-height: var(--lh-body);
+  color: var(--text);
+  background: var(--bg);
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+h1, h2, h3 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  line-height: var(--lh-tight);
+  letter-spacing: -0.02em;
+}
+
+a { color: inherit; text-decoration: none; }
+img { max-width: 100%; display: block; }
+ul { list-style: none; }
+
+::selection { background: var(--accent); color: var(--text-on-accent); }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+
+/* =====================================================================
+   SHARED UTILITIES (used from any page)
+   ===================================================================== */
+.container {
+  width: min(100% - 2 * var(--gutter), var(--max-width));
+  margin-inline: auto;
+}
+
+.section { padding-block: var(--s-8); }
+
+.eyebrow {
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--accent-strong);
+}
+
+.skip-link {
+  position: absolute;
+  left: -999px;
+  top: var(--s-2);
+  z-index: calc(var(--z-nav) + 1);
+  padding: var(--s-2) var(--s-4);
+  border-radius: var(--r-pill);
+  background: var(--accent);
+  color: var(--text-on-accent);
+}
+.skip-link:focus { left: var(--s-3); }
+
+/* ---------- Buttons ---------- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--s-2);
+  padding: 0.9rem 1.7rem;
+  border: 0;
+  border-radius: var(--r-pill);
+  font: 600 var(--fs-sm) / 1 var(--font-body);
+  cursor: pointer;
+  transition: transform var(--dur) var(--ease), box-shadow var(--dur) var(--ease);
+}
+.btn:disabled { opacity: 0.7; cursor: wait; }
+
+.btn--primary {
+  background: var(--accent);
+  color: var(--text-on-accent);
+  box-shadow: var(--shadow-clay-accent);
+}
+.btn--primary:hover:not(:disabled) { transform: translateY(-2px); }
+.btn--primary:active:not(:disabled) {
+  transform: translateY(1px);
+  box-shadow: var(--shadow-clay-accent-pressed);
+}
+
+.btn--soft {
+  background: var(--surface);
+  color: var(--text);
+  box-shadow: var(--shadow-raised-sm);
+}
+.btn--soft:hover:not(:disabled) { box-shadow: var(--shadow-raised); transform: translateY(-2px); }
+.btn--soft:active:not(:disabled) { box-shadow: var(--shadow-pressed); transform: translateY(0); }
+
+/* ---------- Animations ---------- */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: none; }
+}
+
+@keyframes pageIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: none; }
+}
+
+@keyframes shimmer {
+  to { background-position: -200% 0; }
+}
+
+.page { animation: pageIn var(--dur-slow) var(--ease) both; }
+
+/* Delay with style={{ '--d': '0.15s' }} */
+.anim-up {
+  animation: fadeUp var(--dur-slow) var(--ease) both;
+  animation-delay: var(--d, 0s);
+}
+
+/* Loading placeholder */
+.skeleton {
+  min-height: 300px;
+  border-radius: var(--r-lg);
+  background: linear-gradient(100deg, var(--surface) 30%, var(--surface-strong) 50%, var(--surface) 70%);
+  background-size: 200% 100%;
+  box-shadow: var(--shadow-raised-sm);
+  animation: shimmer 1.4s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
