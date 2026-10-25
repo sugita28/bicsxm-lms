@@ -49,8 +49,9 @@ export default function Home() {
             where they stand.
           </p>
           <div className={`${styles.actions} anim-up`} style={{ '--d': '0.24s' }}>
-            <Link to="/courses" className="btn btn--primary">Browse courses</Link>
-            <Link to="/contact" className="btn btn--soft">Talk to us</Link>
+            <Link to="/login" className="btn btn--primary">Log In</Link>
+            <Link to="/signup" className="btn btn--soft">Create Account</Link>
+            <Link to="/courses" className="btn btn--soft">Browse courses</Link>
           </div>
         </div>
 

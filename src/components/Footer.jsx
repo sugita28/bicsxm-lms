@@ -26,6 +26,15 @@ export default function Footer() {
           </div>
 
           <div>
+            <h2 className={styles.heading}>Portals</h2>
+            <ul className={styles.list}>
+              <li><Link to="/student/login">Student Login</Link></li>
+              <li><Link to="/teacher/login">Instructor Login</Link></li>
+              <li><Link to="/admin/login">Admin Portal</Link></li>
+            </ul>
+          </div>
+
+          <div>
             <h2 className={styles.heading}>Get in touch</h2>
             <ul className={styles.list}>
               <li><a href={`mailto:${site.email}`}>{site.email}</a></li>

@@ -1,3 +1,4 @@
+import axios from 'axios';
 import { useCallback, useEffect, useState } from 'react';
 
 export default function useCourses() {
@@ -14,13 +15,9 @@ export default function useCourses() {
         setLoading(true);
         setError('');
 
-        // Later, swap this for your real API URL
-        const res = await fetch('/data/courses.json', { signal: controller.signal });
-        if (!res.ok) throw new Error('Could not load the courses. Please try again.');
-        const data = await res.json();
-
+        const res = await axios.get('/data/courses.json', { signal: controller.signal });
         if (controller.signal.aborted) return;
-        setCourses(data);
+        setCourses(res.data);
       } catch (err) {
         if (err.name !== 'AbortError') setError(err.message);
       } finally {
