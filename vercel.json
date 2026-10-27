@@ -3,6 +3,10 @@
     {
       "source": "/api/:path*",
       "destination": "https://lms.bishamsinchiury.com.np/api/:path*"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
     }
   ]
 }
