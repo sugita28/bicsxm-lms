@@ -7,11 +7,11 @@ import ClayButton from '../../components/auth/ClayButton';
 import OtpInput from '../../components/auth/OtpInput';
 import { useAuthStore } from '../../store/authStore';
 
+
 export default function AdminOtpPage() {
   const navigate = useNavigate();
   const location = useLocation();
   const email = location.state?.email || '';
-  const setAuth = useAuthStore((state) => state.setAuth);
 
   const [otp, setOtp] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -44,17 +44,14 @@ export default function AdminOtpPage() {
     setIsSubmitting(true);
 
     try {
-      const response = await adminApi.post('/auth/login/verify-otp/', {
+      await adminApi.post('/auth/login/verify-otp/', {
         email,
         otp,
       });
-      const data = response.data;
 
-      setAuth('admin', {
-        user: data.user || null,
-        status: data.status || 'ACTIVE',
-        scope: data.scope || 'full',
-      });
+      // Cookies are now set — hydrate the store from /auth/me/ to get
+      // the full user object with the correctly-cased status ('ACTIVE').
+      await useAuthStore.getState().hydrate('admin');
 
       toast.success('Admin authentication verified!');
       navigate('/admin/dashboard');
