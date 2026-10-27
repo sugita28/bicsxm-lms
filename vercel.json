@@ -1,0 +1,8 @@
+{
+  "rewrites": [
+    {
+      "source": "/api/:path*",
+      "destination": "https://lms.bishamsinchiury.com.np/api/:path*"
+    }
+  ]
+}
