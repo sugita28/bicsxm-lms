@@ -8,7 +8,8 @@ export default defineConfig({
     proxy: {
       '/api': {
         // target: 'http://localhost:8000',
-        target: 'https://authentication-flour-graduate-apparatus.trycloudflare.com/',
+        target: 'https://lms.bishamsinchiury.com.np/',
+        // target: 'https://authentication-flour-graduate-apparatus.trycloudflare.com/',
         changeOrigin: true,
       },
     },
