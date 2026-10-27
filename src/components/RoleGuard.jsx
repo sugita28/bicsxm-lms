@@ -72,21 +72,23 @@ export default function RoleGuard({ role, children }) {
     );
   }
 
+  const normalizedStatus = status?.toUpperCase();
+
   // Handle specific account statuses
-  if (status === 'EMAIL_UNVERIFIED') {
+  if (normalizedStatus === 'EMAIL_UNVERIFIED' || normalizedStatus === 'PENDING_EMAIL_VERIFICATION') {
     return <Navigate to={`/${roleKey}/verify-email`} replace />;
   }
 
-  if (status === 'PENDING_APPROVAL') {
+  if (normalizedStatus === 'PENDING_APPROVAL' || normalizedStatus === 'PENDING_ADMIN_APPROVAL') {
     return <Navigate to={`/${roleKey}/pending-approval`} replace />;
   }
 
-  if (status === 'REJECTED') {
+  if (normalizedStatus === 'REJECTED') {
     return <Navigate to={`/${roleKey}/rejected`} replace />;
   }
 
   // For ACTIVE accounts, ensure full token scope is present
-  if (status === 'ACTIVE') {
+  if (normalizedStatus === 'ACTIVE') {
     if (scope !== 'full') {
       return <Navigate to={`/${roleKey}/verify-email`} replace />;
     }
