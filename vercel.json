@@ -1,12 +1,15 @@
 {
-  "rewrites": [
+  "routes": [
     {
-      "source": "/api/:path*",
-      "destination": "https://lms.bishamsinchiury.com.np/api/:path*"
+      "src": "/api/(.*)",
+      "dest": "https://lms.bishamsinchiury.com.np/api/$1"
     },
     {
-      "source": "/((?!api/).*)",
-      "destination": "/index.html"
+      "handle": "filesystem"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/index.html"
     }
   ]
 }
