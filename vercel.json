@@ -5,7 +5,7 @@
       "destination": "https://lms.bishamsinchiury.com.np/api/:path*"
     },
     {
-      "source": "/(.*)",
+      "source": "/((?!api/).*)",
       "destination": "/index.html"
     }
   ]

@@ -60,7 +60,7 @@ export function createRoleApi(role, options = {}) {
   const csrfCookieName = `${roleName}_csrf`;
 
   const instance = axios.create({
-    baseURL: options.baseURL || `${import.meta.env.VITE_API_BASE_URL || '/api'}/${roleName}`,
+    baseURL: options.baseURL || `/api/${roleName}`,
     withCredentials: true,
     timeout: options.timeout || 15000,
     headers: {
