@@ -69,6 +69,28 @@ export default function LoginPage({ role: initialRole = 'student' }) {
           setError(field, { message });
         });
       }
+
+      // Handle specific 403 flow redirection codes
+      if (err.code === 'email_not_verified') {
+        toast.info(err.message || 'Please verify your email before logging in.');
+        navigate(`/${selectedRole}/verify-email`, { state: { email: values.email } });
+        return;
+      }
+      if (err.code === 'pending_admin_approval') {
+        navigate(`/${selectedRole}/pending-approval`);
+        return;
+      }
+      if (err.code === 'account_rejected') {
+        navigate(`/${selectedRole}/rejected`, { state: { reason: err.rejectionReason } });
+        return;
+      }
+      if (err.code === 'account_suspended') {
+        const msg = 'Your account has been suspended. Please contact support.';
+        setServerError(msg);
+        toast.error(msg);
+        return;
+      }
+
       const generalMessage = err.message || 'Login failed. Please verify your credentials.';
       setServerError(generalMessage);
       toast.error(generalMessage);

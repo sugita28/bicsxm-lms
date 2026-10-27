@@ -16,6 +16,8 @@ export class ApiError extends Error {
     code = 'UNKNOWN_ERROR',
     status = 500,
     fieldErrors = {},
+    nextStep = null,
+    rejectionReason = null,
     raw = null,
   }) {
     super(message);
@@ -23,6 +25,8 @@ export class ApiError extends Error {
     this.code = code;
     this.status = status;
     this.fieldErrors = fieldErrors || {};
+    this.nextStep = nextStep;
+    this.rejectionReason = rejectionReason;
     this.raw = raw;
   }
 
@@ -53,6 +57,19 @@ export function normalizeError(err) {
   if (err && err.response) {
     const status = err.response.status;
     const data = err.response.data;
+
+    // Handle LMS standard envelope: { code, detail, next_step, errors, rejection_reason }
+    if (data && (data.code || data.detail || data.errors)) {
+      return new ApiError({
+        message: data.detail || (data.error && data.error.message) || 'An error occurred.',
+        code: data.code || (data.error && data.error.code) || 'API_ERROR',
+        status,
+        fieldErrors: data.errors || (data.error && data.error.field_errors) || {},
+        nextStep: data.next_step,
+        rejectionReason: data.rejection_reason,
+        raw: data,
+      });
+    }
 
     // Handle standard LMS backend format: { error: { code, message, field_errors } }
     if (data && data.error) {

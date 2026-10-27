@@ -218,7 +218,7 @@
     align-items: stretch;
     padding: var(--s-3);
     border-radius: var(--r-lg);
-    background: var(--glass-bg);
+    background: var(--bg);
     -webkit-backdrop-filter: var(--glass-blur);
     backdrop-filter: var(--glass-blur);
     border: 1px solid var(--glass-border);

@@ -33,8 +33,8 @@ export default function VerifyEmailPage({ role = 'student' }) {
   const [attemptsRemaining, setAttemptsRemaining] = useState(null);
   const [isLockedOut, setIsLockedOut] = useState(false);
 
-  // 5-minute countdown timer (300 seconds)
-  const [expiresIn, setExpiresIn] = useState(300);
+  // 10-minute countdown timer (600 seconds)
+  const [expiresIn, setExpiresIn] = useState(600);
 
   // 60-second resend cooldown timer
   const [resendCooldown, setResendCooldown] = useState(60);
@@ -68,7 +68,8 @@ export default function VerifyEmailPage({ role = 'student' }) {
     setIsSubmitting(true);
 
     try {
-      const response = await api.post('/auth/verify-otp/', { otp });
+      const payload = email ? { email, otp } : { otp };
+      const response = await api.post('/auth/verify-otp/', payload);
       const data = response.data;
 
       setAuth(role, {
@@ -79,7 +80,7 @@ export default function VerifyEmailPage({ role = 'student' }) {
 
       toast.success('Email successfully verified!');
 
-      if (data.status === 'PENDING_APPROVAL') {
+      if (data.status === 'pending_admin_approval' || data.status === 'PENDING_APPROVAL') {
         navigate(`/${role}/pending-approval`);
       } else {
         navigate(`/${role}/dashboard`);
@@ -88,11 +89,17 @@ export default function VerifyEmailPage({ role = 'student' }) {
       const msg = err.message || 'Verification failed.';
       setErrorMessage(msg);
 
-      if (err.code === 'OTP_MAX_ATTEMPTS') {
+      if (err.code === 'already_verified' || err.status === 409) {
+        toast.info('Email is already verified. Redirecting to login...');
+        navigate(`/${role}/login`);
+        return;
+      }
+
+      if (err.code === 'otp_attempts_exceeded' || err.code === 'OTP_MAX_ATTEMPTS') {
         setIsLockedOut(true);
         setAttemptsRemaining(0);
         toast.error('Maximum attempts exceeded. Please request a new code.');
-      } else if (err.code === 'OTP_INVALID') {
+      } else if (err.code === 'otp_invalid' || err.code === 'OTP_INVALID') {
         // Parse attempts left if present in raw or error message
         const match = msg.match(/(\d+)\s+attempt/i);
         if (match) {
@@ -114,15 +121,16 @@ export default function VerifyEmailPage({ role = 'student' }) {
     setIsResending(true);
 
     try {
-      await api.post('/auth/resend-otp/');
+      const payload = email ? { email } : {};
+      await api.post('/auth/resend-otp/', payload);
       toast.success('A fresh verification code has been dispatched to your email.');
-      setExpiresIn(300);
+      setExpiresIn(600);
       setResendCooldown(60);
       setIsLockedOut(false);
       setAttemptsRemaining(null);
       setOtp('');
     } catch (err) {
-      if (err.status === 429) {
+      if (err.status === 429 || err.code === 'otp_cooldown') {
         // Throttled: try parsing wait seconds
         const match = err.message?.match(/(\d+)\s*sec/i);
         const waitSec = match ? parseInt(match[1], 10) : 60;

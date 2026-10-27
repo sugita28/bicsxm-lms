@@ -73,6 +73,12 @@ export default function SignupPage({ role: initialRole = 'student' }) {
       toast.success('Account created! Please verify your email with the OTP sent.');
       navigate(`/${selectedRole}/verify-email`, { state: { email: values.email } });
     } catch (err) {
+      if (err.code === 'account_exists' || err.status === 409) {
+        const msg = 'An account with this email already exists. Please log in.';
+        setServerError(msg);
+        toast.error(msg);
+        return;
+      }
       if (err.fieldErrors) {
         Object.entries(err.fieldErrors).forEach(([field, msgs]) => {
           const message = Array.isArray(msgs) ? msgs[0] : msgs;
