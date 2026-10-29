@@ -103,8 +103,8 @@ export function createRoleApi(role, options = {}) {
       const originalRequest = error.config;
       const status = error?.response?.status;
 
-      // NEW: show the cute error page when the server is down (502)
-        if (status === 502 && typeof window !== 'undefined' && window.location.pathname !== '/502') {
+      // Show the error page when the server is down (502)
+      if (status === 502 && typeof window !== 'undefined' && window.location.pathname !== '/502') {
         window.location.assign('/502');
         return Promise.reject(normalizeError(error));
       }
@@ -121,6 +121,18 @@ export function createRoleApi(role, options = {}) {
 
       // Avoid infinite retry loop
       if (originalRequest._retry) {
+        return Promise.reject(normalizeError(error));
+      }
+
+      // No refresh cookie → definitely not logged in. Bail out immediately instead
+      // of making a pointless POST /auth/token/refresh/ that will also 401.
+      // Without this guard, hydrateAll() on page load fires 3× me/ + 3× refresh/ = 6
+      // cascading 401s for every unauthenticated page visit.
+      //
+      // NOTE: we check the *_csrf cookie (non-HttpOnly, JS-readable) as a proxy for
+      // "has a session", because the *_access and *_refresh cookies are HttpOnly and
+      // are never accessible via document.cookie regardless of whether they exist.
+      if (!getCookie(`${roleName}_csrf`)) {
         return Promise.reject(normalizeError(error));
       }
 
