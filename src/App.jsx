@@ -23,6 +23,7 @@ import SignupPage from './pages/auth/SignupPage.jsx';
 import VerifyEmailPage from './pages/auth/VerifyEmailPage.jsx';
 import StudentDashboard from './pages/student/StudentDashboard.jsx';
 import TeacherDashboard from './pages/teacher/TeacherDashboard.jsx';
+import ServerErrorPage from './pages/errors/ServerErrorPage';
 import { useAuthStore } from './store/authStore';
 
 export default function App() {
@@ -105,7 +106,13 @@ export default function App() {
             <Route path="users" element={<AdminUsersPage />} />
           </Route>
         </Route>
+        
+        
+        
+         {/* Server Error Page (502) */}
+        <Route path="502" element={<ServerErrorPage />} />
 
+         
         {/* Catch-all Not Found Route */}
         <Route path="*" element={<NotFound />} />
       </Routes>

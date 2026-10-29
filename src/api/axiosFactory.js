@@ -95,6 +95,12 @@ export function createRoleApi(role, options = {}) {
       const originalRequest = error.config;
       const status = error?.response?.status;
 
+      // NEW: show the cute error page when the server is down (502)
+        if (status === 502 && typeof window !== 'undefined' && window.location.pathname !== '/502') {
+        window.location.assign('/502');
+        return Promise.reject(normalizeError(error));
+      }
+
       // Only attempt refresh on 401 Unauthorized
       if (status !== 401 || !originalRequest) {
         return Promise.reject(normalizeError(error));
