@@ -1,0 +1,209 @@
+.banner {
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  grid-template-columns: 1.15fr 0.85fr;
+  gap: var(--s-5);
+  align-items: center;
+  min-height: 0;
+  padding: var(--s-5) var(--s-4) var(--s-6) var(--s-7);
+  overflow: hidden;
+  border-radius: var(--r-xl);
+  background: var(--surface);
+  box-shadow:
+    6px 6px 14px rgba(163, 177, 198, 0.3),
+    -6px -6px 14px rgba(255, 255, 255, 0.6);
+}
+
+/* Clay orb in the corner */
+.orb {
+  position: absolute;
+  z-index: -1;
+  top: -80px;
+  left: -80px;
+  width: 240px;
+  height: 240px;
+  border-radius: 50%;
+  background: var(--tone-0);
+  box-shadow: 4px 4px 10px rgba(163, 177, 198, 0.3);
+}
+
+/* Text side */
+.content {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  min-width: 0; /* stops long words from pushing the card wider */
+}
+
+.title {
+  margin: var(--s-2) 0 var(--s-4);
+  font-size: clamp(1.75rem, 3.4vw, 3rem);
+  overflow-wrap: anywhere;
+}
+
+.text { max-width: 50ch; color: var(--text-muted); }
+.text + .text { margin-top: var(--s-3); }
+
+/* Highlight list with raised clay dots */
+.highlights {
+  display: grid;
+  gap: var(--s-3);
+  margin: var(--s-5) 0 0;
+  font-size: var(--fs-sm);
+}
+
+.highlights li {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--s-3);
+}
+
+.highlights li::before {
+  content: '';
+  flex: none;
+  width: 12px;
+  height: 12px;
+  margin-top: 0.35em;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: var(--shadow-clay-dot);
+}
+
+/* Pressed-in (neumorphic) pills */
+.chips { display: flex; flex-wrap: wrap; gap: var(--s-3); margin: var(--s-5) 0; }
+
+.chip {
+  padding: 0.45rem 1rem;
+  border-radius: 999px;
+  background: var(--surface);
+  box-shadow: var(--shadow-inset-sm);
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  color: var(--accent-strong);
+}
+
+/* Soft neon glow on the button only */
+.banner .cta {
+  margin-top: 0;
+  box-shadow:
+    0 6px 14px color-mix(in srgb, var(--accent) 22%, transparent),
+    0 0 10px color-mix(in srgb, var(--accent) 30%, transparent);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.banner .cta:hover { transform: translateY(-2px); }
+
+/* Image side: as tall as the text column, nothing sticks out */
+.media {
+  position: relative;
+  align-self: stretch;
+  min-height: 380px;
+  min-width: 0;
+}
+
+.image {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
+  /* Light photo background melts into the card color */
+  mix-blend-mode: multiply;
+  /* Fades the photo edges so no rectangle shows */
+  -webkit-mask-image: radial-gradient(closest-side, #000 78%, transparent 100%);
+  mask-image: radial-gradient(closest-side, #000 78%, transparent 100%);
+}
+
+/* ---------- Large screens (1400px and up) ---------- */
+@media (min-width: 1400px) {
+  .banner {
+    padding: var(--s-6) var(--s-5) var(--s-7) var(--s-8);
+  }
+  .text { max-width: 56ch; }
+}
+
+/* ---------- Laptops and small desktops (up to 1100px) ---------- */
+@media (max-width: 1100px) {
+  .banner {
+    grid-template-columns: 1.1fr 0.9fr;
+    padding: var(--s-5) var(--s-4) var(--s-5) var(--s-6);
+  }
+  .media { min-height: 340px; }
+  .orb { width: 200px; height: 200px; top: -70px; left: -70px; }
+}
+
+/* ---------- Tablets and phones: stack the layout (up to 860px) ---------- */
+@media (max-width: 860px) {
+  .banner {
+    grid-template-columns: 1fr;
+    gap: var(--s-3);
+    padding: var(--s-5) var(--s-5) var(--s-6);
+  }
+
+  /* Orb moves to the bottom corner so it does not tint the photo */
+  .orb {
+    width: 170px;
+    height: 170px;
+    top: auto;
+    left: auto;
+    bottom: -60px;
+    right: -60px;
+  }
+
+  .text { max-width: 60ch; }
+
+  /* Photo goes on top of the text, centered */
+  .media {
+    order: -1;
+    align-self: auto;
+    min-height: 0;
+    display: grid;
+    place-items: center;
+  }
+
+  .image {
+    position: static;
+    width: 100%;
+    max-width: 320px;
+    height: auto;
+    margin-inline: auto;
+  }
+}
+
+/* ---------- Phones (up to 560px) ---------- */
+@media (max-width: 560px) {
+  .banner {
+    padding: var(--s-4) var(--s-4) var(--s-5);
+    border-radius: var(--r-lg);
+  }
+
+  .orb { width: 140px; height: 140px; bottom: -50px; right: -50px; }
+
+  .highlights { font-size: var(--fs-xs); gap: var(--s-2); }
+  .chips { gap: var(--s-2); margin: var(--s-4) 0; }
+  .chip { padding: 0.4rem 0.8rem; }
+
+  /* Full-width button is easier to tap */
+  .banner .cta {
+    width: 100%;
+    justify-content: center;
+    text-align: center;
+  }
+
+  .image { max-width: 280px; }
+}
+
+/* ---------- Very small phones (up to 360px) ---------- */
+@media (max-width: 360px) {
+  .banner { padding: var(--s-3) var(--s-3) var(--s-4); }
+  .title { font-size: 1.6rem; }
+  .image { max-width: 240px; }
+}
+
+/* ---------- Respect reduced motion ---------- */
+@media (prefers-reduced-motion: reduce) {
+  .banner .cta { transition: none; }
+  .banner .cta:hover { transform: none; }
+}

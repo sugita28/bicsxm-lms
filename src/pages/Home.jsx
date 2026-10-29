@@ -4,6 +4,7 @@ import usePageTitle from '../hooks/usePageTitle.js';
 import CourseCard from '../components/CourseCard.jsx';
 import Reveal from '../components/Reveal.jsx';
 import styles from './Home.module.css';
+import DcitBanner from '../components/DcitBanner.jsx';
 
 const steps = [
   {
@@ -135,6 +136,12 @@ export default function Home() {
           </Reveal>
         </div>
       </section>
+
+      
+      {/* ---------- DCIT banner ---------- */}
+      <DcitBanner />
+
+    
 
       {/* ---------- Featured courses ---------- */}
       <section className="container section">
