@@ -51,6 +51,7 @@ export default function AdminOtpPage() {
 
       // Cookies are now set — hydrate the store from /auth/me/ to get
       // the full user object with the correctly-cased status ('ACTIVE').
+      console.log("here")
       await useAuthStore.getState().hydrate('admin');
 
       toast.success('Admin authentication verified!');

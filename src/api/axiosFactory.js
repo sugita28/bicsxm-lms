@@ -1,6 +1,10 @@
 import axios from 'axios';
 import { normalizeError } from './errors';
 
+// Absolute backend origin, e.g. https://lms.bishamsinchiury.com.np
+// (set in .env locally and in Vercel project settings; restart Vite after changing it)
+const API_ORIGIN = (import.meta.env.VITE_API_BASE_URL || '').replace(/\/$/, '');
+
 /**
  * Utility to extract a cookie value by name from document.cookie.
  */
@@ -59,15 +63,19 @@ export function createRoleApi(role, options = {}) {
   const roleName = role.toLowerCase();
   const csrfCookieName = `${roleName}_csrf`;
 
+  // Pull these out so the spread below can't overwrite the merged values
+  const { baseURL, timeout, headers, ...rest } = options;
+
   const instance = axios.create({
-    baseURL: options.baseURL || `/api/${roleName}`,
+    baseURL: baseURL || `${API_ORIGIN}/api/${roleName}`,
     withCredentials: true,
-    timeout: options.timeout || 15000,
+    timeout: timeout || 15000,
     headers: {
       'Content-Type': 'application/json',
       Accept: 'application/json',
+      ...headers,
     },
-    ...options,
+    ...rest,
   });
 
   // Request interceptor: attach role-specific CSRF token to unsafe methods
