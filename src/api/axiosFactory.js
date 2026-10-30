@@ -128,56 +128,56 @@ export function createRoleApi(role, options = {}) {
       // of making a pointless POST /auth/token/refresh/ that will also 401.
       // Without this guard, hydrateAll() on page load fires 3× me/ + 3× refresh/ = 6
       // cascading 401s for every unauthenticated page visit.
-      //
-      // NOTE: we check the *_csrf cookie (non-HttpOnly, JS-readable) as a proxy for
-      // "has a session", because the *_access and *_refresh cookies are HttpOnly and
-      // are never accessible via document.cookie regardless of whether they exist.
-      if (!getCookie(`${roleName}_csrf`)) {
-        return Promise.reject(normalizeError(error));
-      }
-
-      const state = refreshState[roleName] || { isRefreshing: false, queue: [] };
-      refreshState[roleName] = state;
-
-      // If already refreshing, wait for single-flight resolution
-      if (state.isRefreshing) {
-        return new Promise((resolve, reject) => {
-          state.queue.push({
-            resolve: () => resolve(instance(originalRequest)),
-            reject: (err) => reject(normalizeError(err)),
-          });
-        });
-      }
-
-      originalRequest._retry = true;
-      state.isRefreshing = true;
-
-      try {
-        // Attempt token refresh for this role
-        await instance.post('/auth/token/refresh/');
-
-        // Process queued calls
-        processQueue(roleName, null);
-
-        // Retry original request
-        return instance(originalRequest);
-      } catch (refreshError) {
-        processQueue(roleName, refreshError);
-
-        // Dispatch role session expiration event for UI/Zustand store listeners
-        if (typeof window !== 'undefined') {
-          window.dispatchEvent(
-            new CustomEvent('auth:session-expired', {
-              detail: { role: roleName },
-            }),
-          );
+        //
+        // NOTE: we check the *_csrf cookie (non-HttpOnly, JS-readable) as a proxy for
+        // "has a session", because the *_access and *_refresh cookies are HttpOnly and
+        // are never accessible via document.cookie regardless of whether they exist.
+        if (!getCookie(`${roleName}_csrf`)) {
+          return Promise.reject(normalizeError(error));
         }
 
-        return Promise.reject(normalizeError(refreshError));
-      } finally {
-        state.isRefreshing = false;
-      }
-    },
+        const state = refreshState[roleName] || { isRefreshing: false, queue: [] };
+        refreshState[roleName] = state;
+
+        // If already refreshing, wait for single-flight resolution
+        if (state.isRefreshing) {
+          return new Promise((resolve, reject) => {
+            state.queue.push({
+              resolve: () => resolve(instance(originalRequest)),
+              reject: (err) => reject(normalizeError(err)),
+            });
+          });
+        }
+
+        originalRequest._retry = true;
+        state.isRefreshing = true;
+
+        try {
+          // Attempt token refresh for this role
+          await instance.post('/auth/token/refresh/');
+
+          // Process queued calls
+          processQueue(roleName, null);
+
+          // Retry original request
+          return instance(originalRequest);
+        } catch (refreshError) {
+          processQueue(roleName, refreshError);
+
+          // Dispatch role session expiration event for UI/Zustand store listeners
+          if (typeof window !== 'undefined') {
+            window.dispatchEvent(
+              new CustomEvent('auth:session-expired', {
+                detail: { role: roleName },
+              }),
+            );
+          }
+
+          return Promise.reject(normalizeError(refreshError));
+        } finally {
+          state.isRefreshing = false;
+        }
+      },
   );
 
   return instance;
