@@ -19,7 +19,9 @@ export default function useCourses() {
         if (controller.signal.aborted) return;
         setCourses(res.data);
       } catch (err) {
-        if (err.name !== 'AbortError') setError(err.message);
+        // Ignore cancelled requests (React Strict Mode cancels the first one in dev)
+        if (axios.isCancel(err) || controller.signal.aborted) return;
+        setError(err.message);
       } finally {
         if (!controller.signal.aborted) setLoading(false);
       }
