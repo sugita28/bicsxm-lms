@@ -1,6 +1,10 @@
 import axios from 'axios';
 import { normalizeError } from './errors';
 
+// Absolute backend origin, e.g. https://lms.bishamsinchiury.com.np
+// (set in .env locally and in Vercel project settings; restart Vite after changing it)
+const API_ORIGIN = (import.meta.env.VITE_API_BASE_URL || '').replace(/\/$/, '');
+
 /**
  * Utility to extract a cookie value by name from document.cookie.
  */
@@ -59,15 +63,19 @@ export function createRoleApi(role, options = {}) {
   const roleName = role.toLowerCase();
   const csrfCookieName = `${roleName}_csrf`;
 
+  // Pull these out so the spread below can't overwrite the merged values
+  const { baseURL, timeout, headers, ...rest } = options;
+
   const instance = axios.create({
-    baseURL: options.baseURL || `/api/${roleName}`,
+    baseURL: baseURL || `${API_ORIGIN}/api/${roleName}`,
     withCredentials: true,
-    timeout: options.timeout || 15000,
+    timeout: timeout || 15000,
     headers: {
       'Content-Type': 'application/json',
       Accept: 'application/json',
+      ...headers,
     },
-    ...options,
+    ...rest,
   });
 
   // Request interceptor: attach role-specific CSRF token to unsafe methods
@@ -95,8 +103,8 @@ export function createRoleApi(role, options = {}) {
       const originalRequest = error.config;
       const status = error?.response?.status;
 
-      // NEW: show the cute error page when the server is down (502)
-        if (status === 502 && typeof window !== 'undefined' && window.location.pathname !== '/502') {
+      // Show the error page when the server is down (502)
+      if (status === 502 && typeof window !== 'undefined' && window.location.pathname !== '/502') {
         window.location.assign('/502');
         return Promise.reject(normalizeError(error));
       }
@@ -116,48 +124,60 @@ export function createRoleApi(role, options = {}) {
         return Promise.reject(normalizeError(error));
       }
 
-      const state = refreshState[roleName] || { isRefreshing: false, queue: [] };
-      refreshState[roleName] = state;
-
-      // If already refreshing, wait for single-flight resolution
-      if (state.isRefreshing) {
-        return new Promise((resolve, reject) => {
-          state.queue.push({
-            resolve: () => resolve(instance(originalRequest)),
-            reject: (err) => reject(normalizeError(err)),
-          });
-        });
-      }
-
-      originalRequest._retry = true;
-      state.isRefreshing = true;
-
-      try {
-        // Attempt token refresh for this role
-        await instance.post('/auth/token/refresh/');
-
-        // Process queued calls
-        processQueue(roleName, null);
-
-        // Retry original request
-        return instance(originalRequest);
-      } catch (refreshError) {
-        processQueue(roleName, refreshError);
-
-        // Dispatch role session expiration event for UI/Zustand store listeners
-        if (typeof window !== 'undefined') {
-          window.dispatchEvent(
-            new CustomEvent('auth:session-expired', {
-              detail: { role: roleName },
-            }),
-          );
+      // No refresh cookie → definitely not logged in. Bail out immediately instead
+      // of making a pointless POST /auth/token/refresh/ that will also 401.
+      // Without this guard, hydrateAll() on page load fires 3× me/ + 3× refresh/ = 6
+      // cascading 401s for every unauthenticated page visit.
+        //
+        // NOTE: we check the *_csrf cookie (non-HttpOnly, JS-readable) as a proxy for
+        // "has a session", because the *_access and *_refresh cookies are HttpOnly and
+        // are never accessible via document.cookie regardless of whether they exist.
+        if (!getCookie(`${roleName}_csrf`)) {
+          return Promise.reject(normalizeError(error));
         }
 
-        return Promise.reject(normalizeError(refreshError));
-      } finally {
-        state.isRefreshing = false;
-      }
-    },
+        const state = refreshState[roleName] || { isRefreshing: false, queue: [] };
+        refreshState[roleName] = state;
+
+        // If already refreshing, wait for single-flight resolution
+        if (state.isRefreshing) {
+          return new Promise((resolve, reject) => {
+            state.queue.push({
+              resolve: () => resolve(instance(originalRequest)),
+              reject: (err) => reject(normalizeError(err)),
+            });
+          });
+        }
+
+        originalRequest._retry = true;
+        state.isRefreshing = true;
+
+        try {
+          // Attempt token refresh for this role
+          await instance.post('/auth/token/refresh/');
+
+          // Process queued calls
+          processQueue(roleName, null);
+
+          // Retry original request
+          return instance(originalRequest);
+        } catch (refreshError) {
+          processQueue(roleName, refreshError);
+
+          // Dispatch role session expiration event for UI/Zustand store listeners
+          if (typeof window !== 'undefined') {
+            window.dispatchEvent(
+              new CustomEvent('auth:session-expired', {
+                detail: { role: roleName },
+              }),
+            );
+          }
+
+          return Promise.reject(normalizeError(refreshError));
+        } finally {
+          state.isRefreshing = false;
+        }
+      },
   );
 
   return instance;
