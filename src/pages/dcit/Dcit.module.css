@@ -1,0 +1,627 @@
+.layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+  gap: var(--s-5);
+  align-items: start;
+}
+
+/* ---------- Left: big card ---------- */
+.stage {
+  position: sticky;
+  top: calc(var(--nav-h) + var(--s-4));
+  display: flex;
+  flex-direction: column;
+  min-height: calc(100vh - var(--nav-h) - var(--s-6));
+  padding: 0;
+  overflow: hidden;
+  border-radius: var(--r-xl);
+  background: var(--surface);
+  box-shadow: var(--shadow-raised);
+}
+
+.hero {
+  position: relative;
+  flex: 1;
+  min-height: 340px;
+  overflow: hidden;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+/* Change the % to move the crop: smaller shows more of the top, larger more of the bottom */
+.heroImage {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 30%;
+}
+
+.heroShade {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(21, 28, 51, 0.75), rgba(21, 28, 51, 0.05) 65%);
+}
+
+.heroText {
+  position: absolute;
+  left: var(--s-6);
+  right: var(--s-6);
+  bottom: var(--s-6);
+  color: var(--text-on-accent);
+}
+
+.heroEyebrow {
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  opacity: 0.85;
+}
+
+.heroTitle {
+  font-size: var(--fs-display);
+}
+
+.stageBody {
+  display: grid;
+  gap: var(--s-3);
+  padding: var(--s-6);
+}
+
+.stageTitle {
+  font-size: var(--fs-xl);
+  text-align: center;
+}
+
+.copy {
+  display: grid;
+  gap: var(--s-5);
+  max-width: 68ch;
+  margin-inline: auto;
+}
+
+.text {
+  color: var(--text-muted);
+  font-size: var(--fs-md);
+  line-height: 1.85;
+  text-align: justify;
+  text-justify: inter-word;
+  hyphens: auto;
+}
+
+.tabs {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--s-3);
+  margin-top: var(--s-2);
+}
+
+.tab {
+  padding: 0.55rem 1.1rem;
+  border-radius: var(--r-pill);
+  background: var(--surface);
+  box-shadow: var(--shadow-raised-sm);
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  color: var(--text);
+  transition: transform 0.6s var(--ease), box-shadow 0.6s var(--ease), color 0.6s var(--ease);
+}
+
+.tab:active {
+  box-shadow: var(--shadow-pressed);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--s-4);
+  margin-top: var(--s-2);
+}
+
+/* ---------- Right: cards ---------- */
+.pages {
+  display: grid;
+  grid-auto-rows: auto;
+  gap: var(--s-5);
+  min-width: 0;
+}
+
+.panel {
+  display: grid;
+  align-content: start;
+  gap: var(--s-3);
+  min-width: 0;
+  padding: var(--s-5);
+  border-radius: var(--r-lg);
+  background: var(--surface);
+  box-shadow: var(--shadow-raised);
+  scroll-margin-top: calc(var(--nav-h) + var(--s-4));
+}
+
+.panelTitle {
+  font-size: var(--fs-xl);
+}
+
+.panelImage {
+  width: 100%;
+  aspect-ratio: 21 / 9;
+  object-fit: cover;
+  object-position: center 20%;
+  border-radius: var(--r-md);
+  box-shadow: var(--shadow-inset);
+}
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--s-3);
+}
+
+.stat {
+  display: grid;
+  gap: var(--s-1);
+  padding: var(--s-4);
+  border-radius: var(--r-md);
+  background: var(--surface);
+  box-shadow: var(--shadow-inset);
+  text-align: center;
+  transition: transform 0.6s var(--ease);
+}
+
+.stat strong {
+  font-family: var(--font-display);
+  font-size: var(--fs-lg);
+  color: var(--accent-strong);
+}
+
+.stat span {
+  font-size: var(--fs-xs);
+  color: var(--text-muted);
+}
+
+.steps {
+  display: grid;
+  gap: var(--s-3);
+}
+
+.step {
+  display: grid;
+  grid-template-columns: 80px 1fr;
+  gap: var(--s-3);
+  align-items: center;
+  padding: var(--s-3);
+  border-radius: var(--r-md);
+  background: var(--surface);
+  box-shadow: var(--shadow-raised-sm);
+  transition: transform 0.6s var(--ease), box-shadow 0.6s var(--ease);
+}
+
+.stepImage {
+  width: 80px;
+  height: 64px;
+  object-fit: cover;
+  border-radius: var(--r-sm);
+  box-shadow: var(--shadow-inset-sm);
+}
+
+.stepNum {
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--accent-strong);
+}
+
+.step h3 {
+  font-size: var(--fs-md);
+}
+
+.step p {
+  font-size: var(--fs-sm);
+  color: var(--text-muted);
+}
+
+/* ---------- Programmes table ---------- */
+.tableWrap {
+  overflow-x: auto;
+  padding: var(--s-2) var(--s-3);
+  border-radius: var(--r-md);
+  background: var(--surface);
+  box-shadow: var(--shadow-inset);
+  scrollbar-width: thin;
+}
+
+.table {
+  width: 100%;
+  min-width: 440px;
+  border-collapse: collapse;
+  font-size: var(--fs-sm);
+}
+
+.table th,
+.table td {
+  padding: 0.8rem 0.6rem;
+  text-align: left;
+  vertical-align: top;
+  border-bottom: 1px solid var(--divider);
+}
+
+.table thead th {
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--accent-strong);
+}
+
+.table tbody th {
+  font-weight: 500;
+  color: var(--text);
+}
+
+.table td {
+  color: var(--text-muted);
+}
+
+.table tbody tr:last-child th,
+.table tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.table .num {
+  text-align: center;
+  white-space: nowrap;
+}
+
+/* ---------- Subject details arrow ---------- */
+.arrowBtn {
+  gap: var(--s-2);
+}
+
+.arrow {
+  display: inline-block;
+  font-size: 1.1em;
+  line-height: 1;
+  transition: transform 0.6s var(--ease);
+}
+
+/* ---------- Back to LMS home (text link) ---------- */
+.backLink {
+  display: inline-flex;
+  align-items: center;
+  justify-self: center;
+  gap: var(--s-2);
+  margin-top: var(--s-3);
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  color: var(--text-muted);
+  transition: color 0.4s var(--ease), text-shadow 0.4s var(--ease);
+}
+
+.backArrow {
+  display: inline-block;
+  transition: transform 0.4s var(--ease);
+}
+
+.backLink:hover,
+.backLink:focus-visible {
+  color: var(--accent);
+  text-shadow: 0 0 10px rgba(47, 85, 255, 0.55), 0 0 22px rgba(47, 85, 255, 0.3);
+}
+
+.backLink:hover .backArrow,
+.backLink:focus-visible .backArrow {
+  transform: translateX(-4px);
+}
+
+/* ---------- Subtle motion ---------- */
+@keyframes panelIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: none; }
+}
+
+@keyframes settle {
+  from { transform: scale(1.08); }
+  to   { transform: scale(1); }
+}
+
+.stage {
+  animation: panelIn 1.4s var(--ease) both;
+}
+
+.heroImage {
+  animation: settle 2.6s var(--ease) both;
+}
+
+.panel {
+  animation: panelIn 1.4s var(--ease) both;
+  animation-delay: var(--d, 0s);
+}
+
+/* Hover effects only on devices with a mouse */
+@media (hover: hover) {
+  .tab:hover {
+    color: var(--accent-strong);
+    box-shadow: var(--shadow-raised);
+    transform: translateY(-2px);
+  }
+
+  .stat:hover {
+    transform: translateY(-3px);
+  }
+
+  .step:hover {
+    transform: translateX(4px);
+    box-shadow: var(--shadow-raised);
+  }
+
+  .arrowBtn:hover .arrow {
+    transform: translateX(5px);
+  }
+
+  .table tbody tr {
+    transition: background 0.4s var(--ease);
+  }
+
+  .table tbody tr:hover {
+    background: rgba(47, 85, 255, 0.06);
+  }
+}
+
+/* =====================================================================
+   RESPONSIVE
+   ===================================================================== */
+
+@media (max-width: 1180px) {
+  .stageBody {
+    padding: var(--s-5);
+  }
+
+  .heroText {
+    left: var(--s-5);
+    right: var(--s-5);
+    bottom: var(--s-5);
+  }
+}
+
+/* Short screens: normal page scrolling, nothing pinned */
+@media (min-width: 961px) and (max-height: 700px) {
+  .stage {
+    position: static;
+    min-height: 0;
+  }
+}
+
+/* Tablets: stack the big card on top, cards below */
+@media (max-width: 960px) {
+  .layout {
+    grid-template-columns: 1fr;
+    gap: var(--s-5);
+  }
+
+  .stage {
+    position: static;
+    min-height: 0;
+  }
+
+  .hero {
+    flex: none;
+    min-height: 0;
+    aspect-ratio: 16 / 9;
+  }
+
+  .stageBody {
+    padding: var(--s-5);
+  }
+
+  .panelImage {
+    aspect-ratio: 16 / 7;
+  }
+}
+
+/* Phones */
+@media (max-width: 600px) {
+  .layout,
+  .pages {
+    gap: var(--s-4);
+  }
+
+  .hero {
+    aspect-ratio: 4 / 3;
+  }
+
+  .heroText {
+    left: var(--s-4);
+    right: var(--s-4);
+    bottom: var(--s-4);
+  }
+
+  .stageBody {
+    padding: var(--s-4);
+  }
+
+  .panel {
+    padding: var(--s-4);
+  }
+
+  .panelImage {
+    aspect-ratio: 16 / 9;
+  }
+
+  /* Justified text looks uneven in narrow columns, so use left-aligned */
+  .text {
+    text-align: left;
+  }
+
+  .actions {
+    flex-direction: column;
+    gap: var(--s-3);
+  }
+
+  .actions > * {
+    width: 100%;
+  }
+
+  .tab {
+    padding: 0.65rem 1.1rem;
+  }
+}
+
+/* Very small phones */
+@media (max-width: 380px) {
+  .stats {
+    grid-template-columns: 1fr;
+  }
+
+  .step {
+    grid-template-columns: 1fr;
+  }
+
+  .stepImage {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 16 / 9;
+  }
+}
+
+/* ---------- Desktop: left card grows with its content, right cards scroll ---------- */
+@media (min-width: 961px) and (min-height: 701px) {
+  div.page {
+    padding-block: var(--s-4) var(--s-6);
+  }
+
+  .layout {
+    height: auto;
+    min-height: calc(100vh - var(--nav-h) - var(--s-7));
+    align-items: stretch;
+  }
+
+  .stage {
+    position: relative;
+    top: auto;
+    height: auto;
+    min-height: 100%;
+    overflow: hidden;
+  }
+
+  .hero {
+    flex: 1 1 auto;
+    min-height: 240px;
+    height: auto;
+  }
+
+  .stageBody {
+    flex: none;
+  }
+
+  .pages {
+    height: 0;
+    min-height: 100%;
+    align-content: start;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    scroll-behavior: smooth;
+    padding: 1.25rem 1.75rem 1.75rem 1.25rem;
+  }
+
+  .panel {
+    scroll-margin-top: var(--s-4);
+  }
+}
+
+/* ---------- Hide the side scrollbar (scrolling still works) ---------- */
+.pages {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.pages::-webkit-scrollbar {
+  display: none;
+}
+/* Icon colours: accent turns white when a node is hovered or open */
+.node { color: #1b3a8c; --icon-bg: #f4f6fd; }
+.step:hover .node,
+.stepOpen .node {
+  background: #14c8c0;
+  color: #fff;
+  --icon-accent: #fff;
+  --icon-bg: #14c8c0;
+}
+.highlight .node { background: #1b3a8c; color: #fff; --icon-accent: #14c8c0; --icon-bg: #1b3a8c; }
+.highlight:hover .node { background: #1b3a8c; --icon-accent: #14c8c0; --icon-bg: #1b3a8c; }
+.factIcon { color: #1b3a8c; }
+
+/* Module cards */
+.semModule { --icon-bg: #f4f6fd; gap: 1rem; padding: 1.5rem 0.75rem; }
+.semModuleHot {
+  box-shadow: 0 0 0 2px rgba(20, 200, 192, 0.55),
+              0 0 24px rgba(20, 200, 192, 0.35),
+              6px 6px 14px rgba(27, 58, 140, 0.12);
+  transform: translateY(-6px);
+}
+
+/* Progress bar with finish flag (Semester 3) */
+.semBarWrap { position: relative; margin-top: 1.5rem; padding-right: 2rem; }
+.semBarWrap .semBar { margin-top: 0; }
+.semFlag {
+  position: absolute;
+  right: 0;
+  bottom: 2px;
+  color: #1b3a8c;
+  --icon-accent: #14c8c0;
+}
+/* ---------- Careers ---------- */
+.careers { margin-top: 3.25rem; }
+
+.careersTitle {
+  width: fit-content;
+  max-width: 100%;
+  margin: 0 auto 2.25rem;
+  padding: 0.9rem 2.4rem;
+  border-radius: 999px;
+  background: var(--bg);
+  box-shadow: var(--raised);
+  text-align: center;
+  font-size: clamp(1.2rem, 3vw, 2rem);
+  font-weight: 800;
+  color: var(--navy);
+}
+
+.careerGrid {
+  list-style: none;
+  margin: 0;
+  padding: 0.5rem;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.6rem;
+}
+
+.career {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.1rem;
+  min-height: 190px;
+  padding: 1.6rem 1rem;
+  border-radius: 28px;
+  background: var(--bg);
+  box-shadow: var(--raised);
+  color: var(--navy);
+  text-align: center;
+  font-size: 1.05rem;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+.career:hover { transform: translateY(-4px); box-shadow: var(--raised-sm); }
+
+@media (max-width: 900px) {
+  .careerGrid { grid-template-columns: repeat(2, 1fr); gap: 1.2rem; }
+}
+@media (max-width: 480px) {
+  .careerGrid { grid-template-columns: 1fr; }
+  .career { min-height: 150px; }
+}

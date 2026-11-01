@@ -5,6 +5,7 @@ import LoginPage from '../pages/auth/LoginPage.jsx';
 import ResetPasswordPage from '../pages/auth/ResetPasswordPage.jsx';
 import SignupPage from '../pages/auth/SignupPage.jsx';
 import VerifyEmailPage from '../pages/auth/VerifyEmailPage.jsx';
+import ProfileSettings from '../pages/student/ProfileSettings.jsx';
 import StudentDashboard from '../pages/student/StudentDashboard.jsx';
 
 const studentRoutes = (
@@ -19,6 +20,14 @@ const studentRoutes = (
       element={
         <RoleGuard role="student">
           <StudentDashboard />
+        </RoleGuard>
+      }
+    />
+    <Route
+      path="settings"
+      element={
+        <RoleGuard role="student">
+          <ProfileSettings />
         </RoleGuard>
       }
     />

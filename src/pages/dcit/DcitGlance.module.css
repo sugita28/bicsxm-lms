@@ -1,0 +1,422 @@
+/* =========================================================
+   DCIT at a Glance: Neumorphism theme
+   ========================================================= */
+.glance {
+  --bg: #e6ebf7;
+  --sh-d: rgba(145, 160, 200, 0.55);
+  --sh-l: rgba(255, 255, 255, 0.95);
+  --navy: #1b3a8c;
+  --teal: #14c8c0;
+  --teal-dark: #0e9f98;
+  --muted: #5a6a9a;
+
+  --raised: 9px 9px 20px var(--sh-d), -9px -9px 20px var(--sh-l);
+  --raised-sm: 5px 5px 12px var(--sh-d), -5px -5px 12px var(--sh-l);
+  --inset: inset 6px 6px 13px var(--sh-d), inset -6px -6px 13px var(--sh-l);
+  --inset-sm: inset 3px 3px 7px var(--sh-d), inset -3px -3px 7px var(--sh-l);
+
+  /* used by the SVG icons */
+  --icon-accent: var(--teal);
+  --icon-bg: var(--bg);
+
+  position: relative;
+  margin-top: 3rem;
+  padding: 2.75rem 1.75rem 2.25rem;
+  border-radius: 32px;
+  background: var(--bg);
+  box-shadow: var(--raised);
+  overflow: hidden;
+  color: var(--navy);
+}
+
+.title {
+  margin: 0 0 2.75rem;
+  text-align: center;
+  font-size: clamp(1.5rem, 3.5vw, 2.2rem);
+  font-weight: 800;
+  color: var(--navy);
+  text-shadow: 1px 1px 0 var(--sh-l);
+}
+
+/* ---------- Timeline ---------- */
+.track { position: relative; }
+
+/* Pressed-in groove with a fill that grows on scroll-in */
+.line {
+  position: absolute;
+  top: 32px;
+  left: 10%;
+  right: 10%;
+  height: 8px;
+  border-radius: 999px;
+  background: var(--bg);
+  box-shadow: var(--inset-sm);
+}
+.line::after {
+  content: "";
+  position: absolute;
+  inset: 1px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--teal), var(--navy));
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 1.1s ease;
+}
+.inView .line::after { transform: scaleX(1); }
+
+.steps {
+  position: relative;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 0.75rem;
+}
+
+.step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.1rem;
+  opacity: 0;
+  transform: translateY(16px);
+}
+.inView .step {
+  animation: rise 0.5s ease forwards;
+  animation-delay: calc(var(--i) * 0.12s + 0.2s);
+}
+@keyframes rise { to { opacity: 1; transform: none; } }
+
+.stepBtn {
+  all: unset;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.1rem;
+  cursor: pointer;
+}
+.stepBtn:focus-visible {
+  outline: 2px solid var(--teal);
+  outline-offset: 8px;
+  border-radius: 20px;
+}
+
+/* Raised round button */
+.node {
+  width: 72px;
+  height: 72px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--bg);
+  color: var(--navy);
+  box-shadow: var(--raised);
+  transition: box-shadow 0.25s ease, transform 0.25s ease;
+}
+.step:hover .node { transform: translateY(-3px); }
+
+/* Open / pressed state */
+.stepOpen .node,
+.stepBtn:active .node {
+  box-shadow: var(--inset);
+  transform: none;
+}
+
+/* Internship: raised with a teal glow ring */
+.highlight .node {
+  box-shadow: var(--raised), 0 0 0 3px rgba(20, 200, 192, 0.45);
+}
+.highlight.stepOpen .node {
+  box-shadow: var(--inset), 0 0 0 3px rgba(20, 200, 192, 0.7);
+}
+
+.pill {
+  padding: 0.45rem 1rem;
+  border-radius: 999px;
+  background: var(--bg);
+  color: var(--navy);
+  font-weight: 700;
+  font-size: 0.9rem;
+  text-align: center;
+  box-shadow: var(--raised-sm);
+  transition: box-shadow 0.25s ease, color 0.25s ease;
+}
+.stepOpen .pill {
+  box-shadow: var(--inset-sm);
+  color: var(--teal-dark);
+}
+
+/* ---------- Facts ---------- */
+.facts {
+  list-style: none;
+  margin: 2.75rem 0 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1.25rem;
+}
+.fact { opacity: 0; }
+.inView .fact {
+  animation: rise 0.5s ease forwards;
+  animation-delay: calc(var(--i) * 0.12s + 0.9s);
+}
+.factBody {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  padding: 0.85rem 1.4rem;
+  border-radius: 18px;
+  background: var(--bg);
+  box-shadow: var(--raised-sm);
+  transition: box-shadow 0.25s ease;
+}
+.factBody:hover { box-shadow: var(--inset-sm); }
+.factIcon { color: var(--navy); }
+
+/* ---------- Detail panel (pressed-in well) ---------- */
+.sem {
+  margin: 2.75rem auto 0;
+  padding: 2rem 1.75rem;
+  border-radius: 28px;
+  background: var(--bg);
+  box-shadow: var(--inset);
+  animation: semIn 0.35s ease both;
+}
+@keyframes semIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: none; }
+}
+
+.semBadge,
+.internBadge {
+  display: inline-block;
+  padding: 0.45rem 1.2rem;
+  border-radius: 999px;
+  background: var(--bg);
+  color: var(--teal-dark);
+  font-weight: 700;
+  box-shadow: var(--raised-sm);
+}
+.semTitle,
+.internTitle {
+  margin: 1rem 0 1.6rem;
+  font-size: clamp(1.6rem, 4vw, 2.6rem);
+  color: var(--navy);
+  text-shadow: 1px 1px 0 var(--sh-l);
+}
+
+/* ---------- Module cards (raised) ---------- */
+.semModules {
+  list-style: none;
+  margin: 0;
+  padding: 0.5rem;
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 1.4rem;
+}
+.semModule {
+  grid-column: span 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.6rem 0.85rem;
+  border-radius: 22px;
+  background: var(--bg);
+  box-shadow: var(--raised);
+  color: var(--navy);
+  font-weight: 600;
+  font-size: 0.9rem;
+  text-align: center;
+  transition: box-shadow 0.25s ease, transform 0.25s ease;
+}
+.semModule:nth-child(n + 4) { grid-column: span 3; }
+.semModule:hover { transform: translateY(-3px); }
+
+.semModuleHot {
+  box-shadow: var(--raised), 0 0 0 2px rgba(20, 200, 192, 0.55),
+              0 0 26px rgba(20, 200, 192, 0.35);
+  transform: translateY(-6px);
+}
+
+@media (min-width: 900px) {
+  .semModules { grid-template-columns: repeat(5, 1fr); }
+  .semModule,
+  .semModule:nth-child(n + 4) { grid-column: span 1; }
+}
+
+/* ---------- Progress bar + flag ---------- */
+.semBarWrap {
+  position: relative;
+  margin-top: 1.9rem;
+  padding-right: 2.4rem;
+}
+.semBar {
+  height: 16px;
+  border-radius: 999px;
+  background: var(--bg);
+  box-shadow: var(--inset-sm);
+  padding: 3px;
+}
+.semBar span {
+  display: block;
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #3fe0d8, var(--teal));
+  box-shadow: 0 0 10px rgba(20, 200, 192, 0.55);
+}
+.semFlag {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-62%);
+  color: var(--navy);
+  --icon-accent: var(--teal);
+}
+
+/* ---------- Internship panel ---------- */
+.intern {
+  color: var(--navy);
+  --icon-accent: var(--teal);
+  --icon-bg: var(--bg);
+}
+.internTitle { margin-bottom: 0.5rem; }
+.internIntro {
+  margin: 0 0 1.8rem;
+  max-width: 52ch;
+  color: var(--muted);
+  line-height: 1.55;
+}
+
+.internMonths {
+  list-style: none;
+  margin: 0;
+  padding: 0.5rem;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.4rem;
+}
+.internMonth {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  padding: 1.7rem 1.4rem 1.4rem;
+  border-radius: 22px;
+  background: var(--bg);
+  box-shadow: var(--raised);
+  color: var(--navy);
+  transition: transform 0.25s ease;
+}
+.internMonth:hover { transform: translateY(-3px); }
+.internMonth svg { margin-bottom: 0.4rem; }
+.internMonth small {
+  color: var(--teal-dark);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.internMonth strong { font-size: 1.1rem; }
+.internMonth > span:last-child {
+  color: var(--muted);
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+.internNum {
+  position: absolute;
+  top: 1.1rem;
+  right: 1.1rem;
+  width: 32px;
+  height: 32px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--bg);
+  color: var(--teal-dark);
+  font-weight: 800;
+  font-size: 0.9rem;
+  box-shadow: var(--inset-sm);
+}
+.internDone {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  margin-top: 1.8rem;
+  padding: 1rem 1.4rem;
+  border-radius: 999px;
+  background: var(--bg);
+  box-shadow: var(--inset-sm);
+  color: var(--navy);
+  font-weight: 700;
+}
+
+/* ---------- Mobile ---------- */
+@media (max-width: 700px) {
+  .glance { padding: 2rem 1rem 1.75rem; border-radius: 26px; }
+  .steps { grid-template-columns: 1fr; gap: 1.5rem; }
+  .line { display: none; }
+  .step, .stepBtn { flex-direction: row; gap: 1rem; justify-content: flex-start; }
+  .node { width: 58px; height: 58px; }
+  .internMonths { grid-template-columns: 1fr; }
+  .sem { padding: 1.5rem 1rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .step,
+  .fact,
+  .sem { animation: none !important; transition: none; opacity: 1; transform: none; }
+  .line::after { transition: none; transform: scaleX(1); }
+}
+/* ---------- Careers ---------- */
+.careers { margin-top: 3.25rem; }
+
+.careersTitle {
+  width: fit-content;
+  max-width: 100%;
+  margin: 0 auto 2.25rem;
+  padding: 0.9rem 2.4rem;
+  border-radius: 999px;
+  background: var(--bg);
+  box-shadow: var(--raised);
+  text-align: center;
+  font-size: clamp(1.2rem, 3vw, 2rem);
+  font-weight: 800;
+  color: var(--navy);
+}
+
+.careerGrid {
+  list-style: none;
+  margin: 0;
+  padding: 0.5rem;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.6rem;
+}
+
+.career {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.1rem;
+  min-height: 190px;
+  padding: 1.6rem 1rem;
+  border-radius: 28px;
+  background: var(--bg);
+  box-shadow: var(--raised);
+  color: var(--navy);
+  text-align: center;
+  font-size: 1.05rem;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+.career:hover { transform: translateY(-4px); box-shadow: var(--raised-sm); }
+
+@media (max-width: 900px) {
+  .careerGrid { grid-template-columns: repeat(2, 1fr); gap: 1.2rem; }
+}
+@media (max-width: 480px) {
+  .careerGrid { grid-template-columns: 1fr; }
+  .career { min-height: 150px; }
+}

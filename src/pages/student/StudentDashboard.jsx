@@ -1,4 +1,4 @@
-import { BookOpen, CheckCircle, LogOut, RefreshCw, User } from 'lucide-react';
+import { BookOpen, CheckCircle, LogOut, RefreshCw, Settings, User } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
@@ -34,6 +34,20 @@ export default function StudentDashboard() {
     navigate('/student/login');
   };
 
+  const pillButton = {
+    display: 'inline-flex',
+    alignItems: 'center',
+    gap: '0.4rem',
+    padding: '0.6rem 1.25rem',
+    borderRadius: 'var(--r-full, 9999px)',
+    background: 'var(--surface)',
+    boxShadow: 'var(--shadow-raised-sm)',
+    border: 'none',
+    cursor: 'pointer',
+    fontWeight: '600',
+    fontSize: '0.9rem',
+  };
+
   return (
     <div style={{ minHeight: '100vh', background: 'var(--bg)', padding: '2.5rem 1.5rem', fontFamily: 'var(--font-display, Figtree, sans-serif)' }}>
       <div style={{ maxWidth: '840px', margin: '0 auto' }}>
@@ -47,6 +61,8 @@ export default function StudentDashboard() {
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
+            flexWrap: 'wrap',
+            gap: '1rem',
             marginBottom: '2rem',
             border: '1px solid rgba(255, 255, 255, 0.6)',
           }}
@@ -80,26 +96,23 @@ export default function StudentDashboard() {
             </div>
           </div>
 
-          <button
-            type="button"
-            onClick={handleLogout}
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '0.4rem',
-              padding: '0.6rem 1.25rem',
-              borderRadius: 'var(--r-full, 9999px)',
-              background: 'var(--surface)',
-              boxShadow: 'var(--shadow-raised-sm)',
-              border: 'none',
-              cursor: 'pointer',
-              color: 'var(--danger, #b3342a)',
-              fontWeight: '600',
-              fontSize: '0.9rem',
-            }}
-          >
-            <LogOut size={16} /> Sign Out
-          </button>
+          <div style={{ display: 'flex', gap: '0.75rem' }}>
+            <button
+              type="button"
+              onClick={() => navigate('/student/settings')}
+              style={{ ...pillButton, color: 'var(--text)' }}
+            >
+              <Settings size={16} /> Settings
+            </button>
+
+            <button
+              type="button"
+              onClick={handleLogout}
+              style={{ ...pillButton, color: 'var(--danger, #b3342a)' }}
+            >
+              <LogOut size={16} /> Sign Out
+            </button>
+          </div>
         </div>
 
         {/* Dashboard Proof Ping Card */}

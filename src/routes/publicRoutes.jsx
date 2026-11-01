@@ -8,6 +8,7 @@ import Home from '../pages/Home.jsx';
 import LoginPage from '../pages/auth/LoginPage.jsx';
 import SignupPage from '../pages/auth/SignupPage.jsx';
 import ServerErrorPage from '../pages/errors/ServerErrorPage';
+import Dcit from '../pages/dcit/Dcit.jsx';
 
 const publicRoutes = (
   <>
@@ -16,6 +17,7 @@ const publicRoutes = (
       <Route index element={<Home />} />
       <Route path="courses" element={<Courses />} />
       <Route path="courses/:courseId" element={<CourseDetail />} />
+      <Route path="dcit" element={<Dcit />} />
       <Route path="about" element={<About />} />
       <Route path="contact" element={<Contact />} />
     </Route>
