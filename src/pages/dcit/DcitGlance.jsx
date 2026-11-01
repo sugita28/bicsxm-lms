@@ -3,35 +3,32 @@ import styles from './DcitGlance.module.css';
 import {
   BookIcon,
   BriefcaseIcon,
+  CalendarClockIcon,
   CalendarIcon,
   CapIcon,
   ChartIcon,
   ClipboardIcon,
   CodeBracketsIcon,
   CodeWindowIcon,
-  DataAnalystIcon,
-  DatabaseGearIcon,
   DatabaseIcon,
   FlagIcon,
   HandshakeIcon,
+  HomeCoinsIcon,
   KanbanIcon,
   LaptopIcon,
   LayersIcon,
   LogicIcon,
-  MobileAppIcon,
+  MapPinIcon,
   NetworkIcon,
   OfficeIcon,
   PenToolIcon,
   PhoneIcon,
   PythonIcon,
-  RouterIcon,
-  TesterIcon,
   TreeIcon,
   TrophyIcon,
-  WebDevIcon,
 } from './GlanceIcons.jsx';
 
-// `detail` is optional. Steps that have it become clickable.
+// Each module has `about` and `topics`: edit these to match your real syllabus.
 const steps = [
   {
     label: 'Semester 1',
@@ -41,11 +38,36 @@ const steps = [
       title: 'Web & Mobile Foundations',
       progress: 1 / 3,
       modules: [
-        { name: 'Web Development with Django and API', Icon: CodeWindowIcon },
-        { name: 'Mobile Application Development', Icon: PhoneIcon },
-        { name: 'Software Development with Agile', Icon: KanbanIcon },
-        { name: 'Usability and Web Design', Icon: PenToolIcon },
-        { name: 'Advance Database Design', Icon: DatabaseIcon },
+        {
+          name: 'Web Development with Django and API',
+          Icon: CodeWindowIcon,
+          about: 'Build dynamic websites and web services using the Django framework, and expose data through APIs.',
+          topics: ['Django project structure', 'Models and views', 'Templates', 'REST APIs'],
+        },
+        {
+          name: 'Mobile Application Development',
+          Icon: PhoneIcon,
+          about: 'Design and build apps for mobile devices, from interface layout to publishing.',
+          topics: ['App lifecycle', 'Screens and navigation', 'Device features', 'Testing and release'],
+        },
+        {
+          name: 'Software Development with Agile',
+          Icon: KanbanIcon,
+          about: 'Plan and deliver software in short iterations using Agile methods and team tools.',
+          topics: ['Scrum and Kanban', 'User stories', 'Sprint planning', 'Team collaboration'],
+        },
+        {
+          name: 'Usability and Web Design',
+          Icon: PenToolIcon,
+          about: 'Create clear, accessible and attractive interfaces based on user needs.',
+          topics: ['Layout and typography', 'Colour and accessibility', 'Wireframing', 'Usability testing'],
+        },
+        {
+          name: 'Advance Database Design',
+          Icon: DatabaseIcon,
+          about: 'Design efficient, reliable databases and write advanced queries.',
+          topics: ['Normalisation', 'Advanced SQL', 'Indexing', 'Transactions and security'],
+        },
       ],
     },
   },
@@ -57,11 +79,36 @@ const steps = [
       title: 'Code, Data & Networks',
       progress: 2 / 3,
       modules: [
-        { name: 'Foundation of Software Development', Icon: CodeBracketsIcon },
-        { name: 'Foundation of Database Design', Icon: DatabaseIcon },
-        { name: 'Computer Network and Communication', Icon: NetworkIcon },
-        { name: 'Programming with Python', Icon: PythonIcon },
-        { name: 'Office Solution Development', Icon: OfficeIcon },
+        {
+          name: 'Foundation of Software Development',
+          Icon: CodeBracketsIcon,
+          about: 'Learn the core principles of programming and how software is planned, written and tested.',
+          topics: ['Algorithms and logic', 'Variables and control flow', 'Functions', 'Debugging'],
+        },
+        {
+          name: 'Foundation of Database Design',
+          Icon: DatabaseIcon,
+          about: 'Understand how data is organised and stored, and build your first relational databases.',
+          topics: ['Tables and keys', 'ER diagrams', 'Basic SQL', 'Data integrity'],
+        },
+        {
+          name: 'Computer Network and Communication',
+          Icon: NetworkIcon,
+          about: 'Explore how computers connect and communicate, and how networks are set up and secured.',
+          topics: ['Network models', 'IP addressing', 'Protocols', 'Basic security'],
+        },
+        {
+          name: 'Programming with Python',
+          Icon: PythonIcon,
+          about: 'Write practical programs in Python, one of the most widely used languages in industry.',
+          topics: ['Syntax and data types', 'Loops and functions', 'Files and modules', 'Object-oriented basics'],
+        },
+        {
+          name: 'Office Solution Development',
+          Icon: OfficeIcon,
+          about: 'Automate and improve everyday office work with spreadsheets, documents and macros.',
+          topics: ['Advanced spreadsheets', 'Formulas and macros', 'Reports', 'Workflow automation'],
+        },
       ],
     },
   },
@@ -74,11 +121,37 @@ const steps = [
       progress: 1,
       flag: true,
       modules: [
-        { name: 'Data Structure and Algorithm', Icon: TreeIcon },
-        { name: 'Discrete Mathematics', Icon: LogicIcon },
-        { name: 'Data Science with Python', Icon: ChartIcon },
-        { name: 'Capstone Project', Icon: TrophyIcon, highlight: true },
-        { name: 'Skills for Employment', Icon: HandshakeIcon },
+        {
+          name: 'Data Structure and Algorithm',
+          Icon: TreeIcon,
+          about: 'Learn how to organise data and choose efficient algorithms for real problems.',
+          topics: ['Lists, stacks, queues', 'Trees and graphs', 'Searching and sorting', 'Complexity'],
+        },
+        {
+          name: 'Discrete Mathematics',
+          Icon: LogicIcon,
+          about: 'The mathematical foundations behind computing, logic and problem solving.',
+          topics: ['Logic and sets', 'Relations and functions', 'Combinatorics', 'Graph theory'],
+        },
+        {
+          name: 'Data Science with Python',
+          Icon: ChartIcon,
+          about: 'Analyse and visualise data with Python to find patterns and support decisions.',
+          topics: ['Data cleaning', 'Pandas and NumPy', 'Visualisation', 'Intro to modelling'],
+        },
+        {
+          name: 'Capstone Project',
+          Icon: TrophyIcon,
+          highlight: true,
+          about: 'Bring everything together in a final project you design, build and present.',
+          topics: ['Project proposal', 'Development', 'Documentation', 'Final presentation'],
+        },
+        {
+          name: 'Skills for Employment',
+          Icon: HandshakeIcon,
+          about: 'Prepare for the workplace with professional and interview skills.',
+          topics: ['CV and portfolio', 'Interview practice', 'Teamwork and communication', 'Professional ethics'],
+        },
       ],
     },
   },
@@ -122,21 +195,28 @@ const facts = [
   { text: '15 Subjects', Icon: ClipboardIcon },
 ];
 
-const careers = [
-  { name: 'Web Developer', Icon: WebDevIcon },
-  { name: 'Mobile App Developer', Icon: MobileAppIcon },
-  { name: 'Database Assistant', Icon: DatabaseGearIcon },
-  { name: 'Junior Data Analyst', Icon: DataAnalystIcon },
-  { name: 'Network Support', Icon: RouterIcon },
-  { name: 'Software Tester', Icon: TesterIcon },
+// Edit the years to match your real pathway (these are placeholders)
+const pathway = {
+  degree: { label: "Full Bachelor's Degree", years: 4 },
+  dcit: { label: 'DCIT + Credit Transfer', years: 3 },
+  note: 'Time and tuition saved (varies by university)',
+};
+const yearsSaved = pathway.degree.years - pathway.dcit.years;
+
+const benefits = [
+  { text: 'Fewer Years of Overseas Fees', Icon: CalendarClockIcon },
+  { text: 'Lower Living Costs Abroad', Icon: HomeCoinsIcon },
+  { text: 'Start Affordably in Nepal', Icon: MapPinIcon },
 ];
 
 export default function DcitGlance() {
   const ref = useRef(null);
   const [inView, setInView] = useState(false);
   const [openLabel, setOpenLabel] = useState(null);
+  const [openSubject, setOpenSubject] = useState(null);
 
   const openStep = steps.find((s) => s.label === openLabel && s.detail);
+  const subject = openStep?.detail.modules?.find((m) => m.name === openSubject);
 
   // Start the animations when the section scrolls into view
   useEffect(() => {
@@ -158,18 +238,39 @@ export default function DcitGlance() {
     return () => io.disconnect();
   }, []);
 
-  // Close the detail panel with Escape
+  // Switching semester closes any open subject
   useEffect(() => {
-    if (!openLabel) return undefined;
-    const onKey = (e) => e.key === 'Escape' && setOpenLabel(null);
-    window.addEventListener('keydown', onKey);
-    return () => window.removeEventListener('keydown', onKey);
+    setOpenSubject(null);
   }, [openLabel]);
 
+  // Escape: close the subject first, then the semester panel
+  useEffect(() => {
+    if (!openLabel) return undefined;
+    const onKey = (e) => {
+      if (e.key !== 'Escape') return;
+      if (openSubject) setOpenSubject(null);
+      else setOpenLabel(null);
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [openLabel, openSubject]);
+
+  // "Subject details" button: reveal the section and open Semester 1
+  useEffect(() => {
+    const open = () => {
+      setInView(true);
+      setOpenLabel((cur) => cur ?? 'Semester 1');
+    };
+    window.addEventListener('dcit:open-subjects', open);
+    return () => window.removeEventListener('dcit:open-subjects', open);
+  }, []);
+
   const toggle = (label) => setOpenLabel((cur) => (cur === label ? null : label));
+  const toggleSubject = (name) => setOpenSubject((cur) => (cur === name ? null : name));
 
   return (
     <section
+      id="subjects"
       ref={ref}
       className={`${styles.glance} ${inView ? styles.inView : ''}`}
       aria-labelledby="dcit-glance-title"
@@ -251,7 +352,7 @@ export default function DcitGlance() {
         </div>
       )}
 
-      {/* Semester detail panel (matches the slides) */}
+      {/* Semester detail panel */}
       {openStep && openStep.detail.variant !== 'internship' && (
         <div
           key={openStep.label}
@@ -266,17 +367,65 @@ export default function DcitGlance() {
           <ul className={styles.semModules}>
             {openStep.detail.modules.map((m) => {
               const MIcon = m.Icon;
+              const active = openSubject === m.name;
               return (
                 <li
                   key={m.name}
-                  className={`${styles.semModule} ${m.highlight ? styles.semModuleHot : ''}`}
+                  className={`${styles.semModule} ${m.highlight ? styles.semModuleHot : ''} ${active ? styles.semModuleActive : ''}`}
                 >
-                  <MIcon size={48} />
-                  <span>{m.name}</span>
+                  <button
+                    type="button"
+                    className={styles.semModuleBtn}
+                    aria-pressed={active}
+                    aria-controls="dcit-subject-info"
+                    onClick={() => toggleSubject(m.name)}
+                  >
+                    <MIcon size={48} />
+                    <span>{m.name}</span>
+                    <small className={styles.semHint}>{active ? 'Hide info' : 'View info'}</small>
+                  </button>
                 </li>
               );
             })}
           </ul>
+
+          {/* Subject info */}
+          {subject && (
+            <div
+              key={subject.name}
+              id="dcit-subject-info"
+              className={styles.subjectInfo}
+              role="region"
+              aria-label={subject.name}
+            >
+              <div className={styles.subjectHead}>
+                <span className={styles.subjectIcon}>
+                  <subject.Icon size={40} />
+                </span>
+                <div>
+                  <small className={styles.subjectEyebrow}>{openStep.detail.badge}</small>
+                  <h4 className={styles.subjectName}>{subject.name}</h4>
+                </div>
+                <button
+                  type="button"
+                  className={styles.subjectClose}
+                  onClick={() => setOpenSubject(null)}
+                  aria-label="Close subject info"
+                >
+                  ✕
+                </button>
+              </div>
+
+              <p className={styles.subjectAbout}>{subject.about}</p>
+
+              <p className={styles.subjectLabel}>What you will learn</p>
+              <ul className={styles.subjectTopics}>
+                {subject.topics.map((t) => (
+                  <li key={t}>{t}</li>
+                ))}
+              </ul>
+            </div>
+          )}
 
           <div className={styles.semBarWrap}>
             <div className={styles.semBar} aria-hidden="true">
@@ -301,16 +450,42 @@ export default function DcitGlance() {
         })}
       </ul>
 
-      {/* Careers */}
-      <div className={styles.careers}>
-        <h3 className={styles.careersTitle}>Where DCIT Can Take You</h3>
-        <ul className={styles.careerGrid}>
-          {careers.map((c) => {
-            const CIcon = c.Icon;
+      {/* Save time and money abroad */}
+      <div className={styles.save}>
+        <h3 className={styles.saveTitle}>Save Time and Money Abroad</h3>
+
+        <div className={styles.compare}>
+          {[pathway.degree, pathway.dcit].map((row, i) => (
+            <div key={row.label} className={styles.barRow}>
+              <div className={styles.barLabel}>
+                <strong>{row.label}</strong>
+                <span>{row.years} years</span>
+              </div>
+              <div className={styles.barTrack}>
+                <span
+                  className={`${styles.barFill} ${i === 1 ? styles.barFillAlt : ''}`}
+                  style={{ '--w': `${(row.years / pathway.degree.years) * 100}%` }}
+                />
+              </div>
+            </div>
+          ))}
+
+          <div className={styles.saved}>
+            <span className={styles.savedArrow} aria-hidden="true">↕</span>
+            <strong>{yearsSaved} {yearsSaved === 1 ? 'year' : 'years'} saved</strong>
+            <span>{pathway.note}</span>
+          </div>
+        </div>
+
+        <ul className={styles.benefits}>
+          {benefits.map((b) => {
+            const BIcon = b.Icon;
             return (
-              <li key={c.name} className={styles.career}>
-                <CIcon size={64} />
-                <strong>{c.name}</strong>
+              <li key={b.text} className={styles.benefit}>
+                <span className={styles.benefitIcon}>
+                  <BIcon size={44} />
+                </span>
+                <strong>{b.text}</strong>
               </li>
             );
           })}

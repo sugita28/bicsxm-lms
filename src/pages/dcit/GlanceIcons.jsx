@@ -324,3 +324,57 @@ export const TesterIcon = make(
     <path d="m13 20.5 5 5 9-10" stroke={ACCENT} strokeWidth="3.4" />
   </>,
 );
+/* ---------- Quality block ---------- */
+export const ShieldCheckIcon = make(
+  <>
+    <path d="M24 4 8 10v12c0 11 7 18 16 22 9-4 16-11 16-22V10z" />
+    <path d="m16 24 6 6 11-12" stroke={ACCENT} strokeWidth="3.6" />
+  </>,
+);
+
+export const GlobeIcon = make(
+  <>
+    <circle cx="24" cy="24" r="18" />
+    <ellipse cx="24" cy="24" rx="8" ry="18" stroke={ACCENT} />
+    <path d="M6 24h36" />
+    <path d="M10 14h28M10 34h28" stroke={ACCENT} />
+  </>,
+);
+/* ---------- Save time & money ---------- */
+export const CalendarClockIcon = make(
+  <>
+    <rect x="5" y="9" width="32" height="30" rx="5" />
+    <path d="M5 18h32M13 5v8M29 5v8" />
+    <g fill={ACCENT} stroke="none">
+      <circle cx="13" cy="25" r="1.8" />
+      <circle cx="21" cy="25" r="1.8" />
+      <circle cx="29" cy="25" r="1.8" />
+      <circle cx="13" cy="32" r="1.8" />
+      <circle cx="21" cy="32" r="1.8" />
+    </g>
+    <circle cx="36" cy="35" r="9" fill={ACCENT} stroke="none" />
+    <path d="M36 30v5.5l3.5 2" stroke={BG} strokeWidth="2.4" />
+  </>,
+);
+
+export const HomeCoinsIcon = make(
+  <>
+    <path d="M5 24 21 9l16 15" />
+    <path d="M9 21v17h16" />
+    <path d="M16 38V29h7v9" />
+    <g fill={ACCENT} stroke="none">
+      <ellipse cx="36" cy="26" rx="8" ry="3.4" />
+      <path d="M28 29.5v4c0 1.9 3.6 3.4 8 3.4s8-1.5 8-3.4v-4c0 1.9-3.6 3.4-8 3.4s-8-1.5-8-3.4z" />
+      <path d="M28 36v4c0 1.9 3.6 3.4 8 3.4s8-1.5 8-3.4v-4c0 1.9-3.6 3.4-8 3.4s-8-1.5-8-3.4z" />
+    </g>
+  </>,
+);
+
+export const MapPinIcon = make(
+  <>
+    <path d="M4 33 12 24h24l8 9v7H4z" />
+    <path d="M24 24v16" />
+    <path d="M24 4a9 9 0 0 0-9 9c0 7 9 15 9 15s9-8 9-15a9 9 0 0 0-9-9z" fill={ACCENT} stroke="none" />
+    <circle cx="24" cy="13" r="3.2" fill={BG} stroke="none" />
+  </>,
+);
