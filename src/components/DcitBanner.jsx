@@ -44,7 +44,7 @@ export default function DcitBanner() {
               ))}
             </ul>
 
-            <Link to="/courses" className={`btn btn--primary ${styles.cta}`}>
+            <Link to="/dcit" className={`btn btn--primary ${styles.cta}`}>
               Explore DCIT
             </Link>
           </div>

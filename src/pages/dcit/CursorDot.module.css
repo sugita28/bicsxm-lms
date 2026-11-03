@@ -1,0 +1,60 @@
+/* Outer box is moved by JavaScript, so it only positions the dot */
+.cursor {
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 60;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s var(--ease);
+  will-change: transform;
+}
+
+.cursor[data-show='true'] {
+  opacity: 1;
+}
+
+.dot {
+  position: absolute;
+  left: -8px;
+  top: -8px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow:
+    var(--shadow-clay-dot),
+    0 0 0 6px rgba(47, 85, 255, 0.14),
+    0 0 22px 4px rgba(47, 85, 255, 0.38);
+  transition:
+    transform 0.35s var(--ease),
+    background 0.35s var(--ease),
+    box-shadow 0.35s var(--ease);
+}
+
+/* Over a button, link or icon circle: grows into a soft ring */
+.cursor[data-hot='true'] .dot {
+  transform: scale(2.4);
+  background: rgba(47, 85, 255, 0.16);
+  box-shadow:
+    0 0 0 1.5px rgba(47, 85, 255, 0.55),
+    0 0 26px 6px rgba(47, 85, 255, 0.28);
+}
+
+/* Mouse button held down */
+.cursor[data-down='true'] .dot {
+  transform: scale(0.8);
+}
+
+.cursor[data-hot='true'][data-down='true'] .dot {
+  transform: scale(2);
+}
+
+/* Never on touch screens */
+@media (hover: none), (pointer: coarse) {
+  .cursor {
+    display: none;
+  }
+}
