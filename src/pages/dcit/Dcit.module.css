@@ -128,6 +128,12 @@
   grid-auto-rows: auto;
   gap: var(--s-5);
   min-width: 0;
+    background:
+    radial-gradient(900px 600px at 8% 6%, rgba(169, 189, 252, 0.45), transparent 60%),
+    radial-gradient(800px 560px at 95% 38%, rgba(255, 196, 160, 0.38), transparent 60%),
+    radial-gradient(800px 600px at 5% 70%, rgba(189, 176, 251, 0.35), transparent 60%),
+    radial-gradient(700px 520px at 92% 92%, rgba(163, 230, 211, 0.35), transparent 60%),
+    linear-gradient(180deg, #eaedfa 0%, #e4e8f7 50%, #e0e5f6 100%);
 }
 
 .panel {
@@ -155,34 +161,7 @@
   box-shadow: var(--shadow-inset);
 }
 
-.stats {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: var(--s-3);
-}
-
-.stat {
-  display: grid;
-  gap: var(--s-1);
-  padding: var(--s-4);
-  border-radius: var(--r-md);
-  background: var(--surface);
-  box-shadow: var(--shadow-inset);
-  text-align: center;
-  transition: transform 0.6s var(--ease);
-}
-
-.stat strong {
-  font-family: var(--font-display);
-  font-size: var(--fs-lg);
-  color: var(--accent-strong);
-}
-
-.stat span {
-  font-size: var(--fs-xs);
-  color: var(--text-muted);
-}
-
+/* ---------- How it works: photo fills the left of each card ---------- */
 .steps {
   display: grid;
   gap: var(--s-3);
@@ -190,10 +169,10 @@
 
 .step {
   display: grid;
-  grid-template-columns: 80px 1fr;
-  gap: var(--s-3);
-  align-items: center;
-  padding: var(--s-3);
+  grid-template-columns: 130px 1fr;
+  align-items: stretch;
+  padding: 0;
+  overflow: hidden;                 /* card corners clip the photo */
   border-radius: var(--r-md);
   background: var(--surface);
   box-shadow: var(--shadow-raised-sm);
@@ -201,11 +180,20 @@
 }
 
 .stepImage {
-  width: 80px;
-  height: 64px;
-  object-fit: cover;
-  border-radius: var(--r-sm);
-  box-shadow: var(--shadow-inset-sm);
+  display: block;
+  width: 100%;
+  height: 100%;
+  min-height: 110px;
+  padding: 0;
+  border-radius: 0;
+  box-shadow: none;
+  object-fit: cover;                /* photo covers the whole image area */
+  object-position: center;
+}
+
+.step > div {
+  align-self: center;
+  padding: var(--s-3) var(--s-4);
 }
 
 .stepNum {
@@ -318,265 +306,9 @@
   transform: translateX(-4px);
 }
 
-/* ---------- Subtle motion ---------- */
-@keyframes panelIn {
-  from { opacity: 0; transform: translateY(20px); }
-  to   { opacity: 1; transform: none; }
-}
-
-@keyframes settle {
-  from { transform: scale(1.08); }
-  to   { transform: scale(1); }
-}
-
-.stage {
-  animation: panelIn 1.4s var(--ease) both;
-}
-
-.heroImage {
-  animation: settle 2.6s var(--ease) both;
-}
-
-.panel {
-  animation: panelIn 1.4s var(--ease) both;
-  animation-delay: var(--d, 0s);
-}
-
-/* Hover effects only on devices with a mouse */
-@media (hover: hover) {
-  .tab:hover {
-    color: var(--accent-strong);
-    box-shadow: var(--shadow-raised);
-    transform: translateY(-2px);
-  }
-
-  .stat:hover {
-    transform: translateY(-3px);
-  }
-
-  .step:hover {
-    transform: translateX(4px);
-    box-shadow: var(--shadow-raised);
-  }
-
-  .arrowBtn:hover .arrow {
-    transform: translateX(5px);
-  }
-
-  .table tbody tr {
-    transition: background 0.4s var(--ease);
-  }
-
-  .table tbody tr:hover {
-    background: rgba(47, 85, 255, 0.06);
-  }
-}
-
-/* =====================================================================
-   RESPONSIVE
-   ===================================================================== */
-
-@media (max-width: 1180px) {
-  .stageBody {
-    padding: var(--s-5);
-  }
-
-  .heroText {
-    left: var(--s-5);
-    right: var(--s-5);
-    bottom: var(--s-5);
-  }
-}
-
-/* Short screens: normal page scrolling, nothing pinned */
-@media (min-width: 961px) and (max-height: 700px) {
-  .stage {
-    position: static;
-    min-height: 0;
-  }
-}
-
-/* Tablets: stack the big card on top, cards below */
-@media (max-width: 960px) {
-  .layout {
-    grid-template-columns: 1fr;
-    gap: var(--s-5);
-  }
-
-  .stage {
-    position: static;
-    min-height: 0;
-  }
-
-  .hero {
-    flex: none;
-    min-height: 0;
-    aspect-ratio: 16 / 9;
-  }
-
-  .stageBody {
-    padding: var(--s-5);
-  }
-
-  .panelImage {
-    aspect-ratio: 16 / 7;
-  }
-}
-
-/* Phones */
-@media (max-width: 600px) {
-  .layout,
-  .pages {
-    gap: var(--s-4);
-  }
-
-  .hero {
-    aspect-ratio: 4 / 3;
-  }
-
-  .heroText {
-    left: var(--s-4);
-    right: var(--s-4);
-    bottom: var(--s-4);
-  }
-
-  .stageBody {
-    padding: var(--s-4);
-  }
-
-  .panel {
-    padding: var(--s-4);
-  }
-
-  .panelImage {
-    aspect-ratio: 16 / 9;
-  }
-
-  /* Justified text looks uneven in narrow columns, so use left-aligned */
-  .text {
-    text-align: left;
-  }
-
-  .actions {
-    flex-direction: column;
-    gap: var(--s-3);
-  }
-
-  .actions > * {
-    width: 100%;
-  }
-
-  .tab {
-    padding: 0.65rem 1.1rem;
-  }
-}
-
-/* Very small phones */
-@media (max-width: 380px) {
-  .stats {
-    grid-template-columns: 1fr;
-  }
-
-  .step {
-    grid-template-columns: 1fr;
-  }
-
-  .stepImage {
-    width: 100%;
-    height: auto;
-    aspect-ratio: 16 / 9;
-  }
-}
-
-/* ---------- Desktop: left card grows with its content, right cards scroll ---------- */
-@media (min-width: 961px) and (min-height: 701px) {
-  div.page {
-    padding-block: var(--s-4) var(--s-6);
-  }
-
-  .layout {
-    height: auto;
-    min-height: calc(100vh - var(--nav-h) - var(--s-7));
-    align-items: stretch;
-  }
-
-  .stage {
-    position: relative;
-    top: auto;
-    height: auto;
-    min-height: 100%;
-    overflow: hidden;
-  }
-
-  .hero {
-    flex: 1 1 auto;
-    min-height: 240px;
-    height: auto;
-  }
-
-  .stageBody {
-    flex: none;
-  }
-
-  .pages {
-    height: 0;
-    min-height: 100%;
-    align-content: start;
-    overflow-y: auto;
-    overscroll-behavior: contain;
-    scroll-behavior: smooth;
-    padding: 1.25rem 1.75rem 1.75rem 1.25rem;
-  }
-
-  .panel {
-    scroll-margin-top: var(--s-4);
-  }
-}
-
-/* ---------- Hide the side scrollbar (scrolling still works) ---------- */
-.pages {
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-}
-
-.pages::-webkit-scrollbar {
-  display: none;
-}
-/* Icon colours: accent turns white when a node is hovered or open */
-.node { color: #1b3a8c; --icon-bg: #f4f6fd; }
-.step:hover .node,
-.stepOpen .node {
-  background: #14c8c0;
-  color: #fff;
-  --icon-accent: #fff;
-  --icon-bg: #14c8c0;
-}
-.highlight .node { background: #1b3a8c; color: #fff; --icon-accent: #14c8c0; --icon-bg: #1b3a8c; }
-.highlight:hover .node { background: #1b3a8c; --icon-accent: #14c8c0; --icon-bg: #1b3a8c; }
-.factIcon { color: #1b3a8c; }
-
-/* Module cards */
-.semModule { --icon-bg: #f4f6fd; gap: 1rem; padding: 1.5rem 0.75rem; }
-.semModuleHot {
-  box-shadow: 0 0 0 2px rgba(20, 200, 192, 0.55),
-              0 0 24px rgba(20, 200, 192, 0.35),
-              6px 6px 14px rgba(27, 58, 140, 0.12);
-  transform: translateY(-6px);
-}
-
-/* Progress bar with finish flag (Semester 3) */
-.semBarWrap { position: relative; margin-top: 1.5rem; padding-right: 2rem; }
-.semBarWrap .semBar { margin-top: 0; }
-.semFlag {
-  position: absolute;
-  right: 0;
-  bottom: 2px;
-  color: #1b3a8c;
-  --icon-accent: #14c8c0;
-}
 /* ---------- Accreditation (neumorphic, no inner card, no teal) ---------- */
 .quality {
-  --icon-accent: var(--accent);   /* second icon tone: same blue family as the page */
+  --icon-accent: var(--accent);
   --icon-bg: var(--surface);
 
   display: grid;
@@ -647,36 +379,82 @@
   font-style: italic;
   color: var(--text-muted);
 }
-/* =========================================
-   Explore Career Paths - Neumorphic UI
-   ========================================= */
-/* =========================================
-   Explore Career Paths - Neumorphic UI
-   ========================================= */
 
+/* ---------- Subtle motion ---------- */
+@keyframes panelIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: none; }
+}
+
+@keyframes settle {
+  from { transform: scale(1.08); }
+  to   { transform: scale(1); }
+}
+
+.stage {
+  animation: panelIn 1.4s var(--ease) both;
+}
+
+.heroImage {
+  animation: settle 2.6s var(--ease) both;
+}
+
+.panel {
+  animation: panelIn 1.4s var(--ease) both;
+  animation-delay: var(--d, 0s);
+}
+
+/* Hover effects only on devices with a mouse */
+@media (hover: hover) {
+  .tab:hover {
+    color: var(--accent-strong);
+    box-shadow: var(--shadow-raised);
+    transform: translateY(-2px);
+  }
+
+  .step:hover {
+    transform: translateX(4px);
+    box-shadow: var(--shadow-raised);
+  }
+
+  .arrowBtn:hover .arrow {
+    transform: translateX(5px);
+  }
+
+  .table tbody tr {
+    transition: background 0.4s var(--ease);
+  }
+
+  .table tbody tr:hover {
+    background: rgba(47, 85, 255, 0.06);
+  }
+}
+
+/* =========================================
+   Explore Career Paths
+   ========================================= */
 .careersWrapper {
   position: relative;
-  margin-top: 4rem;
-  padding: 5rem 2rem;
-  background-color: #eef2f9; /* Base soft tone matching the image */
-  border-radius: 24px;
-  overflow: hidden;
+  margin-top: 1rem;
+  padding: 1.5rem 0 4rem 0;
+  background: transparent;
   text-align: center;
   z-index: 1;
 }
 
-/* Abstract Tech Background Layer */
+/* Abstract tech background layer */
 .bgDots {
   position: absolute;
   inset: 0;
-  background-image: radial-gradient(rgba(179, 196, 219, 0.6) 2px, transparent 2px);
+  background-image: radial-gradient(rgba(179, 196, 219, 0.4) 2px, transparent 2px);
   background-size: 32px 32px;
   z-index: -3;
 }
 
-.bgWaveTeal, .bgWaveBlue {
+.bgWaveTeal,
+.bgWaveBlue {
   position: absolute;
-  filter: blur(70px);
+  filter: blur(80px);
   z-index: -2;
   border-radius: 50%;
 }
@@ -684,19 +462,17 @@
 .bgWaveTeal {
   width: 600px;
   height: 400px;
-  background: rgba(20, 200, 192, 0.15); /* Soft teal wave */
-  top: -100px;
+  background: rgba(20, 200, 192, 0.1);
+  top: 0;
   left: -200px;
-  transform: rotate(-15deg);
 }
 
 .bgWaveBlue {
   width: 800px;
   height: 500px;
-  background: rgba(47, 85, 255, 0.1); /* Soft deep blue wave */
-  bottom: -200px;
+  background: rgba(47, 85, 255, 0.08);
+  bottom: -100px;
   right: -250px;
-  transform: rotate(25deg);
 }
 
 .careersHeader {
@@ -706,147 +482,520 @@
 }
 
 .careersHeader h2 {
-  font-size: 2.2rem;
-  color: #1a2b4c;
+  font-size: var(--fs-xl, 2.2rem);
+  color: var(--accent-strong);
   margin-bottom: 0.5rem;
   font-weight: 700;
 }
 
 .careersHeader p {
-  color: #4a5568;
-  font-size: 1.1rem;
+  color: var(--text-muted);
+  font-size: var(--fs-md, 1.1rem);
 }
 
 .careersGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 2rem;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: var(--s-5, 2rem);
   position: relative;
   z-index: 2;
-  max-width: 1100px;
+  max-width: 1150px;
   margin: 0 auto;
 }
 
-/* Freestanding Neumorphic Cards */
+/* Card: full-bleed background image, text at the bottom */
 .careerCard {
-  background: #ffffff;
-  border-radius: 20px;
-  padding: 2.5rem 1.5rem;
+  position: relative;
+  z-index: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
-  box-shadow: 
-    8px 8px 24px rgba(179, 196, 219, 0.4), 
-    -8px -8px 24px rgba(255, 255, 255, 1);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  border: 1px solid rgba(255, 255, 255, 0.7);
+  justify-content: flex-end;
+  min-height: 380px;
+  padding: 2.5rem 1.2rem 1.8rem;
+  overflow: hidden;
+  border: none;
+  border-radius: var(--r-lg, 16px);
+  background: transparent;
+  box-shadow: var(--shadow-raised);
+  transition: transform 0.6s var(--ease), box-shadow 0.6s var(--ease);
 }
 
 .careerCard:hover {
   transform: translateY(-5px);
-  box-shadow: 
-    12px 12px 30px rgba(179, 196, 219, 0.5), 
-    -12px -12px 30px rgba(255, 255, 255, 1);
 }
 
-/* Icon Wrap with Inner Shadow (Recessed) */
-.careerIconWrap {
-  width: 72px;
-  height: 72px;
-  border-radius: 50%;
-  background: #f4f6fd;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 1.5rem;
-  box-shadow: 
-    inset 4px 4px 8px rgba(179, 196, 219, 0.6), 
-    inset -4px -4px 8px rgba(255, 255, 255, 1),
-    2px 2px 8px rgba(179, 196, 219, 0.2); /* Slight outer pop */
+.careerImageWrap {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  display: block;
+  z-index: -2;
 }
 
-.careerIcon {
-  display: flex;
-  color: #1b3a8c; /* Matches your brand accent */
+/* Dark gradient so the white text stays readable */
+.careerImageWrap::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, rgba(15, 23, 42, 0.2) 0%, rgba(15, 23, 42, 0.95) 100%);
+  z-index: 1;
+}
+
+.careerImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.6s var(--ease);
+}
+
+.careerCard:hover .careerImage {
+  transform: scale(1.08);
 }
 
 .careerRole {
-  font-size: 1.4rem;
-  color: #1a2b4c;
-  margin-bottom: 1rem;
+  margin-bottom: 0.6rem;
+  font-size: 1.25rem;
   font-weight: 700;
+  color: #ffffff;
+  text-align: center;
 }
 
-/* Status Tags (No Salary) */
+/* Frosted-glass tag and skill pills */
 .careerTag {
-  padding: 0.4rem 1.2rem;
-  border-radius: 20px;
-  font-size: 0.85rem;
+  margin-bottom: 1.2rem;
+  padding: 0.35rem 0.8rem;
+  border-radius: var(--r-pill, 20px);
+  font-size: 0.75rem;
   font-weight: 600;
-  margin-bottom: 1.5rem;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-.tagBlue {
-  background: #e4ebfb;
-  color: #1b3a8c;
-}
-
-.tagGreen {
-  background: #d1f4e5;
-  color: #0d7a46;
-}
-
-.tagOrange {
-  background: #ffe6cc;
-  color: #cc5500;
-}
-
-/* Skills Pills Grid */
 .careerSkills {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 0.5rem;
-  margin-bottom: 2rem;
-  width: 100%;
+  gap: 0.4rem;
+  margin-bottom: 1.2rem;
 }
 
 .skillPill {
-  background: #f4f6fd;
-  color: #4a5568;
-  padding: 0.35rem 0.8rem;
-  border-radius: 8px;
-  font-size: 0.8rem;
+  padding: 0.25rem 0.6rem;
+  border-radius: var(--r-sm, 6px);
+  font-size: 0.75rem;
   font-weight: 500;
-  border: 1px solid rgba(179, 196, 219, 0.3);
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  color: rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .exploreLink {
   margin-top: auto;
-  color: #1b3a8c;
-  text-decoration: none;
-  font-weight: 600;
-  font-size: 0.95rem;
   display: flex;
   align-items: center;
   gap: 0.4rem;
-  transition: color 0.2s ease, transform 0.2s ease;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #ffffff;
+  text-decoration: none;
+  transition: color 0.4s var(--ease);
+}
+
+.exploreLink span {
+  display: inline-block;
+  transition: transform 0.4s var(--ease);
 }
 
 .exploreLink:hover {
-  color: #14c8c0; /* Teal hover */
+  color: #14c8c0;
 }
 
 .exploreLink:hover span {
   transform: translateX(4px);
 }
 
-/* Mobile Responsiveness */
+/* =====================================================================
+   RESPONSIVE (kept last so it wins)
+   ===================================================================== */
+@media (max-width: 1180px) {
+  .stageBody {
+    padding: var(--s-5);
+  }
+
+  .heroText {
+    left: var(--s-5);
+    right: var(--s-5);
+    bottom: var(--s-5);
+  }
+}
+
+/* Short screens: normal page scrolling, nothing pinned */
+@media (min-width: 961px) and (max-height: 700px) {
+  .stage {
+    position: static;
+    min-height: 0;
+  }
+}
+
+/* Tablets: stack the big card on top, cards below */
+@media (max-width: 960px) {
+  .layout {
+    grid-template-columns: 1fr;
+    gap: var(--s-5);
+  }
+
+  .stage {
+    position: static;
+    min-height: 0;
+  }
+
+  .hero {
+    flex: none;
+    min-height: 0;
+    aspect-ratio: 16 / 9;
+  }
+
+  .stageBody {
+    padding: var(--s-5);
+  }
+
+  .panelImage {
+    aspect-ratio: 16 / 7;
+  }
+}
+
 @media (max-width: 768px) {
   .careersWrapper {
     padding: 3rem 1rem;
   }
+
   .careersHeader h2 {
     font-size: 1.8rem;
   }
+}
+
+/* Phones */
+@media (max-width: 600px) {
+  .layout,
+  .pages {
+    gap: var(--s-4);
+  }
+
+  .hero {
+    aspect-ratio: 4 / 3;
+  }
+
+  .heroText {
+    left: var(--s-4);
+    right: var(--s-4);
+    bottom: var(--s-4);
+  }
+
+  .stageBody {
+    padding: var(--s-4);
+  }
+
+  .panel {
+    padding: var(--s-4);
+  }
+
+  .panelImage {
+    aspect-ratio: 16 / 9;
+  }
+
+  /* Justified text looks uneven in narrow columns, so use left-aligned */
+  .text {
+    text-align: left;
+  }
+
+  .actions {
+    flex-direction: column;
+    gap: var(--s-3);
+  }
+
+  .actions > * {
+    width: 100%;
+  }
+
+  .tab {
+    padding: 0.65rem 1.1rem;
+  }
+
+  .step {
+    grid-template-columns: 100px 1fr;
+  }
+}
+
+/* Very small phones: photo on top, full width */
+@media (max-width: 380px) {
+  .step {
+    grid-template-columns: 1fr;
+  }
+
+  .stepImage {
+    width: 100%;
+    height: auto;
+    min-height: 0;
+    aspect-ratio: 16 / 9;
+  }
+}
+
+/* ---------- Desktop: left card grows with its content, right cards scroll ---------- */
+@media (min-width: 961px) and (min-height: 701px) {
+  div.page {
+    padding-block: var(--s-4) var(--s-6);
+  }
+
+  .layout {
+    height: auto;
+    min-height: calc(100vh - var(--nav-h) - var(--s-7));
+    align-items: stretch;
+  }
+
+  .stage {
+    position: relative;
+    top: auto;
+    height: auto;
+    min-height: 100%;
+    overflow: hidden;
+  }
+
+  .hero {
+    flex: 1 1 auto;
+    min-height: 240px;
+    height: auto;
+  }
+
+  .stageBody {
+    flex: none;
+  }
+
+  .pages {
+    height: 0;
+    min-height: 100%;
+    align-content: start;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    scroll-behavior: smooth;
+    padding: 1.25rem 1.75rem 1.75rem 1.25rem;
+  }
+
+  .panel {
+    scroll-margin-top: var(--s-4);
+  }
+}
+
+/* ---------- Hide the side scrollbar (scrolling still works) ---------- */
+.pages {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.pages::-webkit-scrollbar {
+  display: none;
+}
+
+/* Accreditation logos */
+.logoTile {
+  box-sizing: border-box;
+  background: #fff;
+  border-radius: 22px;
+  height: 170px;
+  padding: 16px;             /* space around every logo */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  box-shadow: 5px 5px 12px rgba(0, 0, 0, 0.12), -5px -5px 12px rgba(255, 255, 255, 0.8);
+}
+.logoTile img {
+  display: block;
+  max-width: 100%;
+  max-height: 100%;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;       /* whole logo always visible, never clipped */
+}
+
+/* EQF logo: no zoom, a little breathing room so nothing is clipped */
+.logoPad img {
+  top: 12px;
+  left: 12px;
+  right: 12px;
+  bottom: 12px;
+  width: calc(100% - 24px);
+  height: calc(100% - 24px);
+  transform: none;
+}
+
+.logoTileWide {
+  height: 150px;
+  margin-bottom: 16px;
+}
+.logoGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+@media (max-width: 480px) {
+  .logoGrid { grid-template-columns: 1fr; }
+  .logoTile { height: 150px; }
+  .logoTileWide { height: 120px; }
+}
+
+/* Programmes card: FAQ text */
+.faq {
+  margin: 0;
+  padding: 0;
+}
+.faqHeading {
+  margin: 0 0 16px;
+  font-size: clamp(18px, 4.5vw, 22px);
+  color: var(--blue, #2447e0);
+}
+.faqList {
+  margin: 0;
+  padding-left: 22px;
+}
+.faqItem {
+  margin-bottom: 18px;
+  padding-left: 4px;
+}
+.faqItem::marker {
+  font-weight: 700;
+}
+.faqQ {
+  margin: 0 0 6px;
+  font-size: 16px;
+  font-weight: 700;
+}
+.faqA {
+  margin: 0 0 8px;
+  font-size: 15px;
+  line-height: 1.65;
+  opacity: 0.85;
+}
+.faqLink {
+  font-size: 15px;
+  word-break: break-all;
+}
+/* =========================================================
+   THEME: soft lavender neumorphism + glass clay
+   (matches the Python for Beginners card: blue + peach orbs)
+   ========================================================= */
+
+/* Same colour for page and cards, so the soft shadows work.
+   Variables set here are inherited by DcitGlance, DcitPathway, etc. */
+.page {
+  --nm-bg: #e4e8f7;
+  --nm-shadow-dark: rgba(139, 150, 196, 0.5);
+  --nm-shadow-light: rgba(255, 255, 255, 0.95);
+
+  --surface: var(--nm-bg);
+  --shadow-raised: 12px 12px 26px var(--nm-shadow-dark), -10px -10px 24px var(--nm-shadow-light);
+  --shadow-raised-sm: 7px 7px 14px var(--nm-shadow-dark), -6px -6px 12px var(--nm-shadow-light);
+  --shadow-inset: inset 6px 6px 12px rgba(139, 150, 196, 0.35), inset -6px -6px 12px rgba(255, 255, 255, 0.9);
+
+  --clay:
+    14px 14px 28px var(--nm-shadow-dark),
+    -10px -10px 24px var(--nm-shadow-light),
+    inset 6px 6px 12px rgba(255, 255, 255, 0.9),
+    inset -7px -7px 14px rgba(139, 150, 196, 0.3);
+
+  position: relative;
+  isolation: isolate;
+  background: var(--nm-bg);
+}
+
+:global(body) {
+  background: #e4e8f7;
+}
+
+/* ---------- Background orbs ---------- */
+.bgOrbs {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  overflow: clip;
+  pointer-events: none;
+}
+
+.orb {
+  position: absolute;
+  border-radius: 50%;
+  opacity: 0.9;
+  animation: orbFloat 14s ease-in-out infinite;
+}
+
+.orbBlue {
+  top: 3%;
+  left: -90px;
+  width: 340px;
+  height: 340px;
+  background:
+    radial-gradient(circle at 30% 26%, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0) 38%),
+    linear-gradient(145deg, #e3ecff 0%, #b4c8ff 45%, #7f9cf5 100%);
+  box-shadow:
+    inset 12px 14px 28px rgba(255, 255, 255, 0.7),
+    inset -18px -20px 40px rgba(80, 110, 230, 0.35),
+    20px 30px 60px rgba(120, 140, 220, 0.28);
+  filter: blur(1.5px);
+}
+
+.orbPeach {
+  top: 32%;
+  right: -80px;
+  width: 280px;
+  height: 280px;
+  background:
+    radial-gradient(circle at 30% 26%, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0) 38%),
+    linear-gradient(145deg, #fff0e3 0%, #ffd0b0 48%, #ff9f7a 100%);
+  box-shadow:
+    inset 12px 14px 28px rgba(255, 255, 255, 0.7),
+    inset -18px -20px 40px rgba(240, 130, 90, 0.32),
+    20px 30px 60px rgba(240, 160, 120, 0.28);
+  filter: blur(1.5px);
+  animation-delay: -4s;
+}
+
+.orbLavender {
+  top: 60%;
+  left: -70px;
+  width: 240px;
+  height: 240px;
+  background:
+    radial-gradient(circle at 30% 26%, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0) 38%),
+    linear-gradient(145deg, #f1ecff 0%, #cfc4ff 48%, #9a86f2 100%);
+  box-shadow:
+    inset 12px 14px 28px rgba(255, 255, 255, 0.7),
+    inset -16px -18px 36px rgba(130, 105, 230, 0.32),
+    18px 26px 54px rgba(150, 130, 230, 0.26);
+  filter: blur(1.5px);
+  animation-delay: -8s;
+}
+
+.orbMint {
+  top: 84%;
+  right: -60px;
+  width: 260px;
+  height: 260px;
+  background:
+    radial-gradient(circle at 30% 26%, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0) 38%),
+    linear-gradient(145deg, #e6fff7 0%, #b6efdd 48%, #6fd6bb 100%);
+  box-shadow:
+    inset 12px 14px 28px rgba(255, 255, 255, 0.7),
+    inset -16px -18px 36px rgba(60, 180, 150, 0.3),
+    18px 26px 54px rgba(100, 200, 170, 0.24);
+  filter: blur(1.5px);
+  animation-delay: -11s;
 }

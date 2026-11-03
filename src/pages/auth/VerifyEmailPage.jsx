@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import { toast } from 'sonner';
 import { studentApi, teacherApi } from '../../api';
@@ -12,11 +12,36 @@ const apis = {
   teacher: teacherApi,
 };
 
+function StepDots({ current, total = 3 }) {
+  return (
+    <div
+      aria-label={`Step ${current} of ${total}`}
+      style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '0.5rem', marginBottom: '1.25rem' }}
+    >
+      {Array.from({ length: total }, (_, i) => (
+        <span
+          key={i}
+          style={{
+            width: i + 1 === current ? '26px' : '10px',
+            height: '10px',
+            borderRadius: '999px',
+            background: i + 1 <= current ? 'var(--accent, #2f55ff)' : 'rgba(0,0,0,0.12)',
+            transition: 'all 0.25s ease',
+          }}
+        />
+      ))}
+      <span style={{ marginLeft: '0.5rem', fontSize: '0.75rem', color: 'var(--text-muted)', fontWeight: 600 }}>
+        Step {current} of {total}
+      </span>
+    </div>
+  );
+}
+
 export default function VerifyEmailPage({ role = 'student' }) {
   const navigate = useNavigate();
   const location = useLocation();
   const [searchParams] = useSearchParams();
-  const setAuth = useAuthStore((state) => state.setAuth);
+  const resetRole = useAuthStore((state) => state.resetRole);
 
   // Email can come from React Router navigation state, URL query param, or auth store
   const storedUser = useAuthStore((state) => state[role]?.user);
@@ -32,6 +57,7 @@ export default function VerifyEmailPage({ role = 'student' }) {
   const [errorMessage, setErrorMessage] = useState('');
   const [attemptsRemaining, setAttemptsRemaining] = useState(null);
   const [isLockedOut, setIsLockedOut] = useState(false);
+  const [verified, setVerified] = useState(false);
 
   // 10-minute countdown timer (600 seconds)
   const [expiresIn, setExpiresIn] = useState(600);
@@ -39,6 +65,7 @@ export default function VerifyEmailPage({ role = 'student' }) {
   // 60-second resend cooldown timer
   const [resendCooldown, setResendCooldown] = useState(60);
 
+  const redirectTimer = useRef(null);
   const api = apis[role] || studentApi;
 
   // Countdown timer effect
@@ -51,10 +78,17 @@ export default function VerifyEmailPage({ role = 'student' }) {
     return () => clearInterval(timer);
   }, []);
 
+  // Clean up the redirect timer if the page unmounts
+  useEffect(() => () => clearTimeout(redirectTimer.current), []);
+
   const formatTime = (seconds) => {
     const m = Math.floor(seconds / 60);
     const s = seconds % 60;
     return `${m}:${s < 10 ? '0' : ''}${s}`;
+  };
+
+  const goToLogin = () => {
+    navigate(`/${role}/login`, { state: { email, verified: true }, replace: true });
   };
 
   const handleVerify = async (e) => {
@@ -69,29 +103,24 @@ export default function VerifyEmailPage({ role = 'student' }) {
 
     try {
       const payload = email ? { email, otp } : { otp };
-      const response = await api.post('/auth/verify-otp/', payload);
-      const data = response.data;
+      await api.post('/auth/verify-otp/', payload);
 
-      setAuth(role, {
-        user: data.user || null,
-        status: data.status,
-        scope: data.scope,
-      });
+      // Clear the temporary EMAIL_UNVERIFIED session so RoleGuard can't bounce us back here
+      resetRole(role);
 
       toast.success('Email successfully verified!');
+      setVerified(true);
 
-      if (data.status === 'pending_admin_approval' || data.status === 'PENDING_APPROVAL') {
-        navigate(`/${role}/pending-approval`);
-      } else {
-        navigate(`/${role}/dashboard`);
-      }
+      // Show the success step briefly, then move to the login form
+      redirectTimer.current = setTimeout(goToLogin, 1500);
     } catch (err) {
       const msg = err.message || 'Verification failed.';
       setErrorMessage(msg);
 
       if (err.code === 'already_verified' || err.status === 409) {
+        resetRole(role);
         toast.info('Email is already verified. Redirecting to login...');
-        navigate(`/${role}/login`);
+        goToLogin();
         return;
       }
 
@@ -100,7 +129,6 @@ export default function VerifyEmailPage({ role = 'student' }) {
         setAttemptsRemaining(0);
         toast.error('Maximum attempts exceeded. Please request a new code.');
       } else if (err.code === 'otp_invalid' || err.code === 'OTP_INVALID') {
-        // Parse attempts left if present in raw or error message
         const match = msg.match(/(\d+)\s+attempt/i);
         if (match) {
           setAttemptsRemaining(parseInt(match[1], 10));
@@ -131,7 +159,6 @@ export default function VerifyEmailPage({ role = 'student' }) {
       setOtp('');
     } catch (err) {
       if (err.status === 429 || err.code === 'otp_cooldown') {
-        // Throttled: try parsing wait seconds
         const match = err.message?.match(/(\d+)\s*sec/i);
         const waitSec = match ? parseInt(match[1], 10) : 60;
         setResendCooldown(waitSec);
@@ -144,6 +171,41 @@ export default function VerifyEmailPage({ role = 'student' }) {
     }
   };
 
+  // Step 3: success screen shown just before the login form
+  if (verified) {
+    return (
+      <AuthLayout
+        role={role}
+        title="Email verified"
+        subtitle="Your account is ready. Taking you to the login form..."
+      >
+        <StepDots current={3} />
+        <div style={{ textAlign: 'center', padding: '1rem 0 0.5rem' }}>
+          <div
+            aria-hidden="true"
+            style={{
+              width: '64px',
+              height: '64px',
+              margin: '0 auto 1rem',
+              borderRadius: '50%',
+              display: 'grid',
+              placeItems: 'center',
+              fontSize: '2rem',
+              color: 'var(--success, #1f8a5b)',
+              background: 'var(--surface, #e5eaf3)',
+              boxShadow: 'var(--shadow-raised-sm)',
+            }}
+          >
+            ✓
+          </div>
+          <ClayButton type="button" onClick={() => { clearTimeout(redirectTimer.current); goToLogin(); }}>
+            Continue to login
+          </ClayButton>
+        </div>
+      </AuthLayout>
+    );
+  }
+
   return (
     <AuthLayout
       role={role}
@@ -154,6 +216,8 @@ export default function VerifyEmailPage({ role = 'student' }) {
           : 'Please enter the 6-digit verification code sent to your email'
       }
     >
+      <StepDots current={2} />
+
       <form onSubmit={handleVerify}>
         <div style={{ textAlign: 'center', marginBottom: '1rem' }}>
           <span

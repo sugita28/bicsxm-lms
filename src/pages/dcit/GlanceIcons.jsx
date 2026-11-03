@@ -1,3 +1,4 @@
+   import { BookIcon, LaptopIcon, ChartIcon, BriefcaseIcon, CapIcon } from './ProIcons.jsx';
 const ACCENT = 'var(--icon-accent, #14c8c0)';
 const BG = 'var(--icon-bg, #f4f6fd)';
 

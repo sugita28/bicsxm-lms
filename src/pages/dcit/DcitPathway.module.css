@@ -1,0 +1,483 @@
+/* ---------- Keyframes ---------- */
+@keyframes pathRise {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: none; }
+}
+
+@keyframes stepUp {
+  from { opacity: 0; transform: translateY(14px) scale(0.9); }
+  to   { opacity: 1; transform: none; }
+}
+
+@keyframes drawRoad {
+  from { stroke-dashoffset: 500; }
+  to   { stroke-dashoffset: 0; }
+}
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-8px); }
+}
+
+@keyframes pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(47, 85, 255, 0.4); }
+  50%      { box-shadow: 0 0 0 12px rgba(47, 85, 255, 0); }
+}
+
+.pathway {
+  position: relative;
+  overflow: hidden;
+  margin-top: var(--s-6);
+  padding: var(--s-6);
+  border-radius: var(--r-xl);
+  background: var(--surface);
+  box-shadow: var(--shadow-raised);
+}
+
+/* Soft neumorphic "clouds" in the background */
+.cloud {
+  position: absolute;
+  border-radius: 999px;
+  background: var(--surface);
+  box-shadow: var(--shadow-inset);
+  pointer-events: none;
+  opacity: 0.9;
+}
+
+.cloudA {
+  top: -60px;
+  left: -80px;
+  width: 360px;
+  height: 160px;
+}
+
+.cloudB {
+  right: -90px;
+  bottom: -70px;
+  width: 420px;
+  height: 180px;
+}
+
+.mainTitle {
+  position: relative;
+  width: fit-content;
+  max-width: 100%;
+  margin: 0 auto var(--s-6);
+  padding: var(--s-3) var(--s-6);
+  border-radius: var(--r-pill);
+  background: var(--surface);
+  box-shadow: var(--shadow-raised-sm);
+  text-align: center;
+  font-size: clamp(1.15rem, 2.6vw, 1.9rem);
+  color: var(--accent-strong);
+}
+
+.mainTitle span {
+  color: var(--text);
+}
+
+.grid {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--s-5);
+}
+
+.panel {
+  position: relative;
+  display: grid;
+  align-content: start;
+  gap: var(--s-4);
+  min-width: 0;
+  padding: var(--s-5);
+  border-radius: var(--r-lg);
+  background: var(--surface);
+  box-shadow: var(--shadow-inset);
+}
+
+.panelTitle {
+  width: fit-content;
+  margin: calc(var(--s-7) * -0.45) auto 0;
+  padding: 0.55rem 1.8rem;
+  border-radius: var(--r-pill);
+  background: var(--accent-strong);
+  color: var(--text-on-accent);
+  font-size: var(--fs-lg);
+  box-shadow: 3px 5px 12px rgba(31, 63, 214, 0.3),
+    inset -2px -3px 6px rgba(10, 25, 120, 0.35),
+    inset 2px 3px 6px rgba(255, 255, 255, 0.25);
+}
+
+/* ---------- Shortcut ---------- */
+.journey {
+  position: relative;
+  display: grid;
+  gap: var(--s-2);
+}
+
+.collegeArt {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  z-index: 2;
+  width: 36%;
+  pointer-events: none;
+  animation: float 6s ease-in-out infinite;
+}
+
+.collegeArt img,
+.svgArt {
+  display: block;
+  width: 100%;
+  height: auto;
+  filter: drop-shadow(6px 10px 12px rgba(120, 135, 180, 0.35));
+}
+
+.label {
+  display: grid;
+  width: fit-content;
+  max-width: 58%;
+  padding: var(--s-2) var(--s-4);
+  border-radius: var(--r-md);
+  background: var(--surface);
+  box-shadow: var(--shadow-raised-sm);
+  text-align: center;
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  color: var(--text);
+}
+
+.label strong {
+  font-family: var(--font-display);
+  font-size: var(--fs-lg);
+  color: var(--accent-strong);
+}
+
+.road {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+.roadBase {
+  fill: none;
+  stroke-width: 16;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 500;
+  stroke-dashoffset: 0;
+  filter: drop-shadow(3px 5px 4px rgba(90, 100, 140, 0.35));
+}
+
+.roadGoldPath {
+  filter: drop-shadow(0 0 8px rgba(255, 190, 40, 0.55));
+}
+
+.roadDash {
+  fill: none;
+  stroke: #fff;
+  stroke-opacity: 0.8;
+  stroke-width: 2;
+  stroke-dasharray: 8 8;
+  stroke-linecap: round;
+}
+
+.dot {
+  filter: drop-shadow(0 2px 4px rgba(20, 40, 160, 0.4));
+}
+
+.saved {
+  display: flex;
+  align-items: center;
+  gap: var(--s-3);
+  padding-left: var(--s-2);
+}
+
+.swap {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--accent-strong);
+}
+
+.saved p {
+  display: grid;
+  padding: var(--s-2) var(--s-4);
+  border-radius: var(--r-md);
+  background: var(--surface);
+  box-shadow: var(--shadow-raised-sm);
+  font-size: var(--fs-sm);
+  font-weight: 600;
+}
+
+.saved small {
+  font-weight: 400;
+  color: var(--text-muted);
+}
+
+/* ---------- Benefit cards ---------- */
+.benefits {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--s-3);
+  margin-top: var(--s-3);
+  list-style: none;
+}
+
+.benefit {
+  display: grid;
+  justify-items: center;
+  align-content: start;
+  gap: var(--s-2);
+  padding: var(--s-4) var(--s-2);
+  border-radius: var(--r-lg);
+  background: var(--surface);
+  box-shadow: var(--shadow-raised-sm);
+  text-align: center;
+  font-size: var(--fs-sm);
+  font-weight: 700;
+  line-height: 1.3;
+  color: var(--accent-strong);
+  transition: transform 0.5s var(--ease), box-shadow 0.5s var(--ease);
+}
+
+/* ---------- 12+1 pathway ---------- */
+.climb {
+  position: relative;
+  aspect-ratio: 1 / 0.92;
+  min-height: 300px;
+}
+
+.expect,
+.diploma,
+.school {
+  position: absolute;
+  z-index: 3;
+  padding: var(--s-2) var(--s-4);
+  border-radius: var(--r-md);
+  background: var(--surface);
+  box-shadow: var(--shadow-raised-sm);
+  font-size: var(--fs-sm);
+  font-weight: 700;
+  line-height: 1.3;
+  text-align: center;
+  color: var(--accent-strong);
+}
+
+.expect {
+  top: 0;
+  right: 0;
+}
+
+.gateArt {
+  position: absolute;
+  top: 12%;
+  right: -2%;
+  width: 50%;
+  animation: float 6s ease-in-out 1s infinite;
+}
+
+.gateArt img {
+  display: block;
+  width: 100%;
+  height: auto;
+  filter: drop-shadow(6px 10px 12px rgba(120, 135, 180, 0.35));
+}
+
+.stairs {
+  position: absolute;
+  inset: 0;
+  list-style: none;
+}
+
+.stepBlock {
+  position: absolute;
+  left: calc(var(--n) * 5.6%);
+  bottom: calc(10% + var(--n) * 4.3%);
+  width: 15%;
+  height: 4.6%;
+  border-radius: 6px;
+  background: linear-gradient(145deg, #6684ff, var(--accent-strong));
+  box-shadow: 3px 5px 8px rgba(31, 63, 214, 0.3),
+    inset 1px 2px 3px rgba(255, 255, 255, 0.35);
+}
+
+.top {
+  left: 62%;
+  bottom: 57.5%;
+  width: 24%;
+  height: 7%;
+  border-radius: 10px;
+  background: linear-gradient(145deg, #5fe3d6, #14a89e);
+  box-shadow: 3px 6px 12px rgba(15, 156, 146, 0.4),
+    inset 1px 2px 3px rgba(255, 255, 255, 0.5);
+}
+
+.diploma {
+  left: 36%;
+  bottom: 66%;
+  background: var(--accent);
+  color: var(--text-on-accent);
+}
+
+.school {
+  left: 0;
+  bottom: 0;
+}
+
+.school small {
+  font-weight: 400;
+  color: var(--text-muted);
+}
+
+.note {
+  margin-top: var(--s-2);
+  text-align: right;
+  font-size: var(--fs-xs);
+  line-height: 1.5;
+  color: var(--text-muted);
+}
+
+/* =========================================================
+   SCROLL ANIMATIONS
+   Hidden only after React mounted (.ready) and while off screen.
+   Animations exist only while .inView, so they replay each time.
+   ========================================================= */
+.pathway.ready:not(.inView) .label,
+.pathway.ready:not(.inView) .saved,
+.pathway.ready:not(.inView) .benefit,
+.pathway.ready:not(.inView) .stepBlock,
+.pathway.ready:not(.inView) .expect,
+.pathway.ready:not(.inView) .diploma,
+.pathway.ready:not(.inView) .school {
+  opacity: 0;
+}
+
+.pathway.ready:not(.inView) .roadBase {
+  stroke-dashoffset: 500;
+}
+
+.pathway.inView .label {
+  animation: pathRise 0.8s var(--ease) 0.3s backwards;
+}
+.pathway.inView .labelB {
+  animation-delay: 0.6s;
+}
+.pathway.inView .saved {
+  animation: pathRise 0.8s var(--ease) 0.5s backwards;
+}
+.pathway.inView .roadBase {
+  animation: drawRoad 1.8s var(--ease) 0.4s backwards;
+}
+.pathway.inView .roadGoldPath {
+  animation-delay: 0.9s;
+}
+.pathway.inView .benefit {
+  animation: pathRise 0.8s var(--ease) calc(1.2s + var(--i) * 0.12s) backwards;
+}
+.pathway.inView .expect,
+.pathway.inView .school {
+  animation: pathRise 0.8s var(--ease) 0.3s backwards;
+}
+.pathway.inView .stepBlock {
+  animation: stepUp 0.6s var(--ease) calc(0.3s + var(--n) * 0.09s) backwards;
+}
+.pathway.inView .diploma {
+  animation: pulse 2.6s ease-out 2.2s infinite;
+}
+
+@media (hover: hover) {
+  .benefit:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-raised);
+  }
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 960px) {
+  .grid {
+    grid-template-columns: 1fr;
+    gap: var(--s-6);
+  }
+
+  .panelTitle {
+    margin-top: calc(var(--s-6) * -0.6);
+  }
+}
+
+@media (max-width: 600px) {
+  .pathway {
+    padding: var(--s-5) var(--s-4);
+  }
+
+  .panel {
+    padding: var(--s-4) var(--s-3);
+  }
+
+  .label {
+    max-width: 62%;
+    font-size: var(--fs-xs);
+  }
+
+  .collegeArt {
+    width: 40%;
+  }
+
+  .benefits {
+    grid-template-columns: 1fr;
+  }
+
+  .benefit {
+    grid-template-columns: auto 1fr;
+    justify-items: start;
+    text-align: left;
+    align-items: center;
+    gap: var(--s-3);
+    padding: var(--s-3) var(--s-4);
+  }
+
+  .climb {
+    min-height: 280px;
+  }
+
+  .expect {
+    font-size: var(--fs-xs);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .collegeArt,
+  .gateArt,
+  .pathway.inView .diploma {
+    animation: none;
+  }
+
+  .pathway:not(.inView) .label,
+  .pathway:not(.inView) .saved,
+  .pathway:not(.inView) .benefit,
+  .pathway:not(.inView) .stepBlock,
+  .pathway:not(.inView) .expect,
+  .pathway:not(.inView) .diploma,
+  .pathway:not(.inView) .school {
+    opacity: 1;
+  }
+}
+
+/* ---------- Your tweaks ---------- */
+.panel .smallNote {
+  margin: 8px auto 0;
+  max-width: 92%;
+  font-size: 13.5px;
+  line-height: 1.65;
+  color: #7d849c;
+  text-align: center;
+}
+
+/* more room above the card titles */
+.panel {
+  padding-top: 40px;
+}
+
+/* more room between the title pill and the content under it */
+.panelTitle {
+  margin-bottom: 28px;
+}

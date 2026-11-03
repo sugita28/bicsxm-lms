@@ -1,0 +1,628 @@
+/* =========================================================
+   DcitAccreditation: Neumorphism + Claymorphism
+   - No outer box: .wrap is layout only, content sits on the page
+   - Blue (light to dark) accent shared by active bar, thinkbox, tick
+   - One orchestrated entrance: cards > bars > thinkbox > facts
+   - Animations replay every time the section scrolls into view
+   ========================================================= */
+
+/* Page colour. Neumorphic shapes only work when the page and the
+   cards share the same colour, so the page background is set here. */
+:global(:root) {
+  --dcit-bg: #e4e8f7;
+}
+:global(body) {
+  background: var(--dcit-bg);
+}
+
+.wrap {
+  --bg: var(--dcit-bg, #e4e8f7);
+  --sh-d: rgba(139, 150, 196, 0.55);
+  --sh-l: rgba(255, 255, 255, 0.95);
+  --lav: #6d78e8;
+  --lav-soft: #b9c1fb;
+  --navy: #1a2a6c;            /* dark blue used for all titles */
+  --text: #4b5378;
+
+  --plasma-1: #5ec5ff;
+  --plasma-2: #2f8cff;
+  --plasma-3: #1b3fbf;
+  --plasma-mid: #2462dc;
+  --plasma: linear-gradient(150deg, var(--plasma-1) 0%, var(--plasma-2) 45%, var(--plasma-3) 100%);
+  --plasma-ink: #ffffff;
+  --plasma-glow: rgba(47, 140, 255, 0.45);
+
+  --raised: 12px 12px 26px var(--sh-d), -10px -10px 24px var(--sh-l);
+  --clay:
+    14px 14px 28px var(--sh-d),
+    -10px -10px 24px var(--sh-l),
+    inset 6px 6px 12px rgba(255, 255, 255, 0.9),
+    inset -7px -7px 14px rgba(139, 150, 196, 0.35);
+  --clay-lift:
+    18px 22px 34px var(--sh-d),
+    -10px -10px 24px var(--sh-l),
+    inset 6px 6px 12px rgba(255, 255, 255, 0.9),
+    inset -7px -7px 14px rgba(139, 150, 196, 0.35);
+  --clay-sm:
+    8px 8px 16px var(--sh-d),
+    -6px -6px 14px var(--sh-l),
+    inset 4px 4px 8px rgba(255, 255, 255, 0.9),
+    inset -4px -4px 9px rgba(139, 150, 196, 0.35);
+  --clay-plasma:
+    8px 12px 22px var(--plasma-glow),
+    -6px -6px 14px var(--sh-l),
+    inset 5px 5px 10px rgba(255, 255, 255, 0.6),
+    inset -6px -6px 12px rgba(10, 40, 150, 0.4);
+
+  --gold-glow: rgba(255, 196, 61, 0.55);
+  --clay-gold:
+    8px 12px 22px var(--plasma-glow),
+    -6px -6px 14px var(--sh-l),
+    inset 5px 5px 10px rgba(255, 255, 255, 0.6),
+    inset -6px -6px 12px rgba(10, 40, 150, 0.4),
+    0 0 0 3px rgba(255, 214, 102, 0.85),
+    0 0 28px 6px var(--gold-glow);
+
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --wave-start: 1.7s;
+  --wave-step: 200ms;
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  margin-top: 1rem;
+  padding: 0;
+  background: none;
+  border-radius: 0;
+  box-shadow: none;
+  color: var(--text);
+}
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+/* Intro paragraph: grey, full width, lined up with the cards */
+.intro {
+  max-width: none;
+  width: 100%;
+  margin: 0 0 1.25rem;
+  padding: 0;
+  font-size: 1rem;
+  line-height: 1.7;
+  color: #7d849c;
+  text-align: left;
+}
+
+.top {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.5fr);
+  gap: 2rem;
+  margin-bottom: 2rem;
+}
+
+/* ---------- Cards ---------- */
+.card {
+  position: relative;
+  padding: 2rem 1.75rem;
+  border-radius: 32px;
+  background: var(--bg);
+  box-shadow: var(--raised);
+}
+
+/* Shield card */
+.card:first-child {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 1rem;
+}
+.card:first-child svg {
+  padding: 1.1rem;
+  box-sizing: content-box;
+  border-radius: 50%;
+  background: var(--bg);
+  box-shadow: var(--clay), 0 0 40px 8px rgba(255, 200, 70, 0.4);
+  animation: breathe 5s ease-in-out infinite;
+}
+.shieldTitle {
+  margin: 0.5rem 0 0;
+  font-size: clamp(1.2rem, 2.2vw, 1.6rem);
+  line-height: 1.25;
+  color: var(--navy);
+}
+.muted {
+  margin: 0;
+  max-width: 34ch;
+  line-height: 1.6;
+}
+
+/* ---------- Ladders ---------- */
+.ladder { transform-origin: 50% 60%; }
+.inView .ladder {
+  animation: zoomIn 1s var(--ease-out) 0.35s backwards;
+}
+
+.ladders { display: grid; gap: 2rem; }
+
+.ladderHead {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+}
+.ladderHead h3 {
+  margin: 0;
+  font-size: clamp(0.95rem, 1.6vw, 1.15rem);
+  color: var(--navy);
+}
+.ladderHead span { font-size: 0.9rem; white-space: nowrap; }
+
+.bars {
+  list-style: none;
+  margin: 0;
+  padding: 0 0 12px;
+  display: flex;
+  align-items: flex-end;
+  gap: 10px;
+  min-height: 130px;
+}
+/* Headroom so the thinkbox never covers the heading */
+.bars:has(.thinkbox) { padding-top: 4.75rem; }
+
+.bar {
+  position: relative;
+  flex: 1;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding-top: 0.6rem;
+  border-radius: 18px;
+  background: var(--bg);
+  box-shadow: var(--clay-sm);
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--text);
+  transform: scaleY(0);
+  transform-origin: bottom;
+  transition:
+    transform 0.8s var(--ease-out),
+    box-shadow 0.35s ease;
+  transition-delay: calc(var(--i) * 60ms + 600ms), 0s;
+}
+.inView .bar { transform: scaleY(1); }
+
+/* When the section leaves the screen, reset the bars instantly
+   so the entrance can play again from the start */
+.wrap:not(.inView) .bar {
+  transition: none;
+}
+
+@media (hover: hover) {
+  .inView .bar:not(.barActive):hover {
+    transform: scaleY(1) translateY(-4px);
+    transition-delay: 0s;
+    box-shadow:
+      10px 14px 20px var(--sh-d),
+      -6px -6px 14px var(--sh-l),
+      inset 4px 4px 8px rgba(255, 255, 255, 0.9),
+      inset -4px -4px 9px rgba(139, 150, 196, 0.35);
+  }
+}
+
+/* ---------- Active bar ---------- */
+.barActive { z-index: 5; }              /* keeps the thinkbox above neighbouring bars */
+
+/* Number sits above the colour overlay */
+.num {
+  position: relative;
+  z-index: 1;
+}
+
+/* When the wave reaches each bar (--i is the bar index) */
+.barTrail,
+.barActive {
+  --d: calc(var(--wave-start) + var(--i) * var(--wave-step));
+}
+
+/* Blue overlay: fills each bar as the wave passes, and stays */
+.barTrail::before,
+.barActive::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: var(--plasma);
+  background-size: 100% 220%;
+  opacity: 0;
+  pointer-events: none;
+}
+/* Bars get deeper blue the closer they are to the active level */
+.barTrail::before {
+  background: linear-gradient(
+    150deg,
+    color-mix(in srgb, var(--plasma-1) calc((1 - var(--t, 0)) * 100%), var(--plasma-2)),
+    color-mix(in srgb, var(--plasma-2) calc((1 - var(--t, 0)) * 100%), var(--plasma-3))
+  );
+  box-shadow:
+    inset 4px 4px 8px rgba(255, 255, 255, 0.5),
+    inset -4px -4px 9px rgba(10, 40, 150, 0.35),
+    0 8px 18px var(--plasma-glow);
+}
+.barActive::before { box-shadow: var(--clay-gold); }
+
+/* Entrance: blue travels 1 > 2 > 3 ... > active level. Each bar hops,
+   throws a little golden glow, then stays blue. */
+.inView .barTrail::before { animation: fillIn 0.7s var(--ease-out) var(--d) forwards; }
+.inView .barTrail {
+  animation:
+    bump 0.9s ease-out var(--d),
+    trailGlow 1.2s ease-out var(--d);
+}
+.inView .barTrail .num { animation: numArrive 0.5s ease-out var(--d) forwards; }
+
+/* Lands on the active level */
+.inView .barActive { animation: bump 1s ease-out var(--d); }
+.inView .barActive::before {
+  animation:
+    fillIn 0.8s var(--ease-out) var(--d) forwards,
+    plasmaShift 6s ease-in-out calc(var(--d) + 900ms) infinite alternate,
+    plasmaPulse 3.2s ease-out calc(var(--d) + 1000ms) infinite;
+}
+.inView .barActive .num { animation: numArrive 0.5s ease-out var(--d) forwards; }
+
+/* Fluffy golden halo behind the active bar */
+.barActive::after {
+  content: "";
+  position: absolute;
+  inset: -18px -16px;
+  z-index: -2;
+  border-radius: 36px;
+  background: radial-gradient(
+    closest-side,
+    rgba(255, 228, 150, 0.95),
+    rgba(255, 200, 70, 0.55) 55%,
+    rgba(255, 190, 50, 0) 100%
+  );
+  filter: blur(12px);
+  opacity: 0;
+  pointer-events: none;
+}
+.inView .barActive::after {
+  animation:
+    haloIn 0.9s var(--ease-out) var(--d) forwards,
+    haloBreathe 3.6s ease-in-out calc(var(--d) + 900ms) infinite;
+}
+
+/* ---------- Thinkbox ---------- */
+.thinkbox {
+  position: absolute;
+  left: 50%;
+  bottom: calc(100% + 16px);
+  translate: -50% 0;
+  width: max-content;
+  max-width: 11.5rem;
+  padding: 0.7rem 1rem;
+  border-radius: 20px;
+  background: var(--plasma);
+  color: var(--plasma-ink);
+  text-shadow: 0 1px 2px rgba(10, 30, 100, 0.5);
+  font-size: 0.8rem;
+  font-weight: 700;
+  line-height: 1.35;
+  text-align: center;
+  box-shadow:
+    0 0 0 2px rgba(255, 214, 102, 0.8),
+    0 0 30px 6px var(--gold-glow),
+    8px 12px 24px var(--plasma-glow),
+    -5px -5px 12px var(--sh-l),
+    inset 4px 4px 9px rgba(255, 255, 255, 0.55),
+    inset -4px -5px 10px rgba(10, 40, 150, 0.35);
+  transform-origin: 50% 100%;
+  opacity: 0;
+  scale: 0.6;
+  pointer-events: none;
+}
+/* Pointer toward the bar */
+.thinkbox::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: -9px;
+  width: 20px;
+  height: 10px;
+  margin-left: -10px;
+  background: var(--plasma-mid);
+  clip-path: polygon(0 0, 100% 0, 50% 100%);
+}
+.inView .thinkbox {
+  animation:
+    thinkPop 0.7s var(--ease-spring) calc(var(--d) + 500ms) forwards,
+    thinkFloat 4s ease-in-out calc(var(--d) + 1300ms) infinite;
+}
+
+/* ---------- Fact cards ---------- */
+.facts {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 2rem;
+}
+.fact {
+  position: relative;
+  display: grid;
+  gap: 0.5rem;
+  align-content: start;
+  padding: 1.75rem 1.75rem 2rem;
+  border-radius: 36px;
+  background: var(--bg);
+  box-shadow: var(--clay);
+  line-height: 1.6;
+  transition: transform 0.45s var(--ease-out), box-shadow 0.45s var(--ease-out);
+}
+.fact strong {
+  font-size: clamp(1.25rem, 2.2vw, 1.75rem);
+  line-height: 1.2;
+  color: var(--navy);
+}
+@media (hover: hover) {
+  .fact:hover {
+    transform: translateY(-6px);
+    box-shadow: var(--clay-lift);
+  }
+}
+
+/* ---------- Entrance sequence ---------- */
+.wrap:not(.inView) .card,
+.wrap:not(.inView) .fact {
+  opacity: 0;
+}
+.inView .card,
+.inView .fact {
+  animation:
+    reveal 0.9s var(--ease-out) backwards,
+    boxFloat 6s ease-in-out infinite;
+  animation-delay:
+    calc(var(--k, 0) * 120ms),
+    calc(var(--k, 0) * 120ms + 1.2s);
+}
+
+/* Light sheen that glides across each box */
+.card::before,
+.fact::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(115deg, transparent 38%, rgba(255, 255, 255, 0.6) 50%, transparent 62%);
+  background-size: 250% 100%;
+  background-position: 160% 0;
+  pointer-events: none;
+}
+.inView .card::before,
+.inView .fact::before {
+  animation: sheen 7s ease-in-out infinite;
+  animation-delay: calc(var(--k, 0) * 400ms + 1.8s);
+}
+
+/* Contents of the boxes */
+.inView .ladderHead {
+  animation: textRise 0.8s var(--ease-out) backwards;
+  animation-delay: 0.5s;
+}
+.inView .shieldTitle,
+.inView .muted {
+  animation: textRise 0.8s var(--ease-out) backwards;
+  animation-delay: 1.1s;
+}
+.inView .muted { animation-delay: 1.25s; }
+
+.inView .fact strong,
+.inView .fact span {
+  animation: textRise 0.7s var(--ease-out) backwards;
+  animation-delay: calc(var(--k, 0) * 120ms + 450ms);
+}
+.inView .fact span { animation-delay: calc(var(--k, 0) * 120ms + 570ms); }
+
+/* Accent line under each fact title grows in */
+.fact strong::after {
+  content: "";
+  display: block;
+  width: 0;
+  height: 4px;
+  margin-top: 0.6rem;
+  border-radius: 4px;
+  background: var(--plasma);
+  transition: width 0.5s var(--ease-out);
+}
+.inView .fact strong::after {
+  animation: lineGrow 0.9s var(--ease-out) backwards;
+  animation-delay: calc(var(--k, 0) * 120ms + 700ms);
+  width: 2.75rem;
+}
+@media (hover: hover) {
+  .fact:hover strong::after { width: 5rem; }
+}
+
+/* Shield draws itself */
+.shieldOutline,
+.shieldTick {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+}
+.inView .shieldOutline { animation: draw 1.3s var(--ease-out) 0.3s forwards; }
+.inView .shieldTick    { animation: draw 0.7s var(--ease-out) 1.2s forwards; }
+
+/* Fluffy golden glow behind the shield */
+.shieldGlow { opacity: 0; }
+.inView .shieldGlow {
+  animation:
+    glowIn 0.9s ease-out 1s forwards,
+    glowPulse 3.4s ease-in-out 2s infinite;
+}
+
+.card:focus-visible,
+.fact:focus-visible,
+.bar:focus-visible {
+  outline: 3px solid var(--lav-soft);
+  outline-offset: 4px;
+}
+
+/* ---------- Keyframes ---------- */
+@keyframes reveal {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes boxFloat {
+  0%, 100% { translate: 0 0; }
+  50%      { translate: 0 -4px; }
+}
+@keyframes sheen {
+  0%, 55% { background-position: 160% 0; }
+  100%    { background-position: -60% 0; }
+}
+@keyframes textRise {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes lineGrow {
+  from { width: 0; }
+  to   { width: 2.75rem; }
+}
+@keyframes draw {
+  to { stroke-dashoffset: 0; }
+}
+@keyframes glowIn {
+  from { opacity: 0; }
+  to   { opacity: 0.85; }
+}
+@keyframes glowPulse {
+  0%, 100% { opacity: 0.6; }
+  50%      { opacity: 1; }
+}
+@keyframes zoomIn {
+  from { opacity: 0; scale: 0.8; filter: blur(8px); }
+  to   { opacity: 1; scale: 1;   filter: blur(0); }
+}
+@keyframes trailFlash {
+  0%   { opacity: 0; }
+  25%  { opacity: 1; }
+  100% { opacity: 0; }
+}
+@keyframes numFlash {
+  0%   { color: var(--text); text-shadow: none; }
+  25%  { color: #fff; text-shadow: 0 1px 2px rgba(10, 30, 100, 0.45); }
+  100% { color: var(--text); text-shadow: none; }
+}
+@keyframes arrive {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+@keyframes numArrive {
+  to { color: #fff; text-shadow: 0 1px 2px rgba(10, 30, 100, 0.45); }
+}
+@keyframes plasmaShift {
+  from { background-position: 50% 0%; }
+  to   { background-position: 50% 100%; }
+}
+@keyframes plasmaPulse {
+  0%   { box-shadow: var(--clay-gold), 0 0 0 0 rgba(255, 200, 60, 0.55); }
+  70%  { box-shadow: var(--clay-gold), 0 0 0 18px rgba(255, 200, 60, 0); }
+  100% { box-shadow: var(--clay-gold), 0 0 0 0 rgba(255, 200, 60, 0); }
+}
+@keyframes fillIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+@keyframes bump {
+  0%, 100% { translate: 0 0; }
+  35%      { translate: 0 -8px; }
+}
+@keyframes trailGlow {
+  0%, 100% { box-shadow: var(--clay-sm); }
+  35%      { box-shadow: var(--clay-sm), 0 0 26px 8px var(--gold-glow); }
+}
+@keyframes haloIn {
+  from { opacity: 0; scale: 0.6; }
+  to   { opacity: 0.85; scale: 1; }
+}
+@keyframes haloBreathe {
+  0%, 100% { opacity: 0.7; scale: 0.96; }
+  50%      { opacity: 1;   scale: 1.07; }
+}
+@keyframes thinkPop {
+  to { opacity: 1; scale: 1; }
+}
+@keyframes thinkFloat {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-5px); }
+}
+@keyframes breathe {
+  0%, 100% { transform: scale(1); }
+  50%      { transform: scale(1.03); }
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 900px) {
+  .top { grid-template-columns: 1fr; }
+  .facts { grid-template-columns: 1fr; }
+}
+@media (max-width: 520px) {
+  .wrap { margin-top: 0.75rem; }
+  .card { padding: 1.5rem 1.1rem; border-radius: 26px; }
+  .fact { border-radius: 28px; }
+  .bars { gap: 6px; }
+  .bar { font-size: 0.72rem; border-radius: 12px; }
+  .thinkbox { max-width: 9rem; font-size: 0.72rem; padding: 0.55rem 0.75rem; }
+  .ladderHead { flex-direction: column; gap: 0.25rem; }
+}
+
+/* ---------- Reduced motion ---------- */
+@media (prefers-reduced-motion: reduce) {
+  .bar,
+  .wrap:not(.inView) .bar { transition: none; transform: none; }
+  .wrap:not(.inView) .card,
+  .wrap:not(.inView) .fact { opacity: 1; }
+  .inView .ladder,
+  .inView .barTrail,
+  .inView .barTrail::before,
+  .inView .barTrail .num,
+  .inView .barActive,
+  .inView .barActive::after,
+  .inView .barActive::before,
+  .inView .barActive .num,
+  .card:first-child svg,
+  .inView .card,
+  .inView .fact,
+  .inView .card::before,
+  .inView .fact::before,
+  .inView .ladderHead,
+  .inView .shieldTitle,
+  .inView .muted,
+  .inView .fact strong,
+  .inView .fact span,
+  .inView .fact strong::after,
+  .inView .shieldOutline,
+  .inView .shieldTick { animation: none; }
+  .shieldOutline,
+  .shieldTick { stroke-dashoffset: 0; }
+  .shieldGlow,
+  .inView .shieldGlow { animation: none; opacity: 0.85; }
+  .fact strong::after { width: 2.75rem; }
+  .thinkbox,
+  .inView .thinkbox { animation: none; opacity: 1; scale: 1; }
+  .fact { transition: none; }
+  .barTrail::before,
+  .barActive::before { opacity: 1; }
+  .barActive::after { opacity: 0.85; }
+  .barTrail .num,
+  .barActive .num { color: #fff; }
+}
