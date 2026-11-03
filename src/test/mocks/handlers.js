@@ -20,4 +20,16 @@ export const handlers = [
   http.get('/api/admin/dashboard/ping/', () => {
     return HttpResponse.json({ role: 'admin', message: 'pong' });
   }),
+
+  // Admin me
+  http.get('/api/admin/auth/me/', () => {
+    return HttpResponse.json({
+      id: 'admin-uuid',
+      email: 'admin@lms.local',
+      role: 'ADMIN',
+      status: 'active',
+      full_name: 'Lead Administrator',
+      scope: 'full',
+    });
+  }),
 ];
