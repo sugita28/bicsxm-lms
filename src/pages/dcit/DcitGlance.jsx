@@ -3,7 +3,6 @@ import styles from './DcitGlance.module.css';
 import {
   BookIcon,
   BriefcaseIcon,
-  CalendarClockIcon,
   CalendarIcon,
   CapIcon,
   ChartIcon,
@@ -13,12 +12,10 @@ import {
   DatabaseIcon,
   FlagIcon,
   HandshakeIcon,
-  HomeCoinsIcon,
   KanbanIcon,
   LaptopIcon,
   LayersIcon,
   LogicIcon,
-  MapPinIcon,
   NetworkIcon,
   OfficeIcon,
   PenToolIcon,
@@ -26,7 +23,7 @@ import {
   PythonIcon,
   TreeIcon,
   TrophyIcon,
-} from './GlanceIcons.jsx';
+} from './ProIcons.jsx';
 
 // Each module has `about` and `topics`: edit these to match your real syllabus.
 const steps = [
@@ -195,20 +192,6 @@ const facts = [
   { text: '15 Subjects', Icon: ClipboardIcon },
 ];
 
-// Edit the years to match your real pathway (these are placeholders)
-const pathway = {
-  degree: { label: "Full Bachelor's Degree", years: 4 },
-  dcit: { label: 'DCIT + Credit Transfer', years: 3 },
-  note: 'Time and tuition saved (varies by university)',
-};
-const yearsSaved = pathway.degree.years - pathway.dcit.years;
-
-const benefits = [
-  { text: 'Fewer Years of Overseas Fees', Icon: CalendarClockIcon },
-  { text: 'Lower Living Costs Abroad', Icon: HomeCoinsIcon },
-  { text: 'Start Affordably in Nepal', Icon: MapPinIcon },
-];
-
 export default function DcitGlance() {
   const ref = useRef(null);
   const [inView, setInView] = useState(false);
@@ -218,22 +201,18 @@ export default function DcitGlance() {
   const openStep = steps.find((s) => s.label === openLabel && s.detail);
   const subject = openStep?.detail.modules?.find((m) => m.name === openSubject);
 
-  // Start the animations when the section scrolls into view
+  // Play the animations every time the section enters the screen,
+  // and reset them when it leaves (works scrolling up and down)
   useEffect(() => {
     const el = ref.current;
     if (!el || typeof IntersectionObserver === 'undefined') {
       setInView(true);
       return undefined;
     }
-    const io = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setInView(true);
-          io.disconnect();
-        }
-      },
-      { threshold: 0.25 },
-    );
+   const io = new IntersectionObserver(
+  ([entry]) => setInView(entry.isIntersecting),
+  { threshold: 0, rootMargin: '-30% 0px -30% 0px' },
+);
     io.observe(el);
     return () => io.disconnect();
   }, []);
@@ -449,48 +428,6 @@ export default function DcitGlance() {
           );
         })}
       </ul>
-
-      {/* Save time and money abroad */}
-      <div className={styles.save}>
-        <h3 className={styles.saveTitle}>Save Time and Money Abroad</h3>
-
-        <div className={styles.compare}>
-          {[pathway.degree, pathway.dcit].map((row, i) => (
-            <div key={row.label} className={styles.barRow}>
-              <div className={styles.barLabel}>
-                <strong>{row.label}</strong>
-                <span>{row.years} years</span>
-              </div>
-              <div className={styles.barTrack}>
-                <span
-                  className={`${styles.barFill} ${i === 1 ? styles.barFillAlt : ''}`}
-                  style={{ '--w': `${(row.years / pathway.degree.years) * 100}%` }}
-                />
-              </div>
-            </div>
-          ))}
-
-          <div className={styles.saved}>
-            <span className={styles.savedArrow} aria-hidden="true">↕</span>
-            <strong>{yearsSaved} {yearsSaved === 1 ? 'year' : 'years'} saved</strong>
-            <span>{pathway.note}</span>
-          </div>
-        </div>
-
-        <ul className={styles.benefits}>
-          {benefits.map((b) => {
-            const BIcon = b.Icon;
-            return (
-              <li key={b.text} className={styles.benefit}>
-                <span className={styles.benefitIcon}>
-                  <BIcon size={44} />
-                </span>
-                <strong>{b.text}</strong>
-              </li>
-            );
-          })}
-        </ul>
-      </div>
     </section>
   );
 }

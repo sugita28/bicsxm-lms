@@ -1,7 +1,7 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
 import { z } from 'zod';
 import { adminApi, studentApi, teacherApi } from '../../api';
@@ -23,6 +23,9 @@ const apis = {
 
 export default function LoginPage({ role: initialRole = 'student' }) {
   const navigate = useNavigate();
+  const location = useLocation();
+  const verifiedEmail = location.state?.email || '';
+  const justVerified = Boolean(location.state?.verified);
   const setAuth = useAuthStore((state) => state.setAuth);
   const [selectedRole, setSelectedRole] = useState(initialRole);
   const [serverError, setServerError] = useState('');
@@ -35,7 +38,7 @@ export default function LoginPage({ role: initialRole = 'student' }) {
     formState: { errors, isSubmitting },
   } = useForm({
     resolver: zodResolver(loginSchema),
-    defaultValues: { email: '', password: '' },
+    defaultValues: { email: verifiedEmail, password: '' },
   });
 
   const onSubmit = async (values) => {
@@ -180,7 +183,25 @@ export default function LoginPage({ role: initialRole = 'student' }) {
           Admin 2FA
         </button>
       </div>
+
       <form onSubmit={handleSubmit(onSubmit)} noValidate>
+        {justVerified && (
+          <div
+            role="status"
+            style={{
+              padding: '0.75rem 1rem',
+              borderRadius: 'var(--r-sm, 12px)',
+              background: '#dcfce7',
+              color: '#166534',
+              fontSize: '0.875rem',
+              marginBottom: '1.25rem',
+              border: '1px solid rgba(22, 101, 52, 0.2)',
+            }}
+          >
+            Email verified. Your account is ready, so log in to continue.
+          </div>
+        )}
+
         {serverError && (
           <div
             role="alert"
