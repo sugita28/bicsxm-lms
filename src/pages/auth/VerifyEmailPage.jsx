@@ -42,6 +42,7 @@ export default function VerifyEmailPage({ role = 'student' }) {
   const location = useLocation();
   const [searchParams] = useSearchParams();
   const resetRole = useAuthStore((state) => state.resetRole);
+  const setAuth = useAuthStore((state) => state.setAuth);
 
   // Email can come from React Router navigation state, URL query param, or auth store
   const storedUser = useAuthStore((state) => state[role]?.user);
@@ -103,16 +104,27 @@ export default function VerifyEmailPage({ role = 'student' }) {
 
     try {
       const payload = email ? { email, otp } : { otp };
-      await api.post('/auth/verify-otp/', payload);
-
-      // Clear the temporary EMAIL_UNVERIFIED session so RoleGuard can't bounce us back here
-      resetRole(role);
+      const res = await api.post('/auth/verify-otp/', payload);
+      const data = res?.data || {};
 
       toast.success('Email successfully verified!');
-      setVerified(true);
 
-      // Show the success step briefly, then move to the login form
-      redirectTimer.current = setTimeout(goToLogin, 1500);
+      const statusLower = (data.status || '').toLowerCase();
+      if (statusLower === 'pending_admin_approval') {
+        setAuth(role, { user: data.user || null, status: 'PENDING_APPROVAL', scope: 'limited' });
+        navigate('/' + role + '/pending-approval');
+      } else if (statusLower === 'active') {
+        if (data.user) {
+          setAuth(role, { user: data.user, status: 'ACTIVE', scope: data.scope || 'full' });
+        } else {
+          await useAuthStore.getState().hydrate(role);
+        }
+        navigate('/' + role + '/dashboard');
+      } else {
+        resetRole(role);
+        setVerified(true);
+        redirectTimer.current = setTimeout(goToLogin, 1500);
+      }
     } catch (err) {
       const msg = err.message || 'Verification failed.';
       setErrorMessage(msg);

@@ -26,8 +26,7 @@ export default function Contact() {
   const handleSubmit = (e) => {
     e.preventDefault();
     setStatus('sending');
-    console.log('Form data:', form); // later: send this to your backend or an email service
-
+    
     setTimeout(() => {
       setStatus('sent');
       setForm({ name: '', email: '', message: '' });
